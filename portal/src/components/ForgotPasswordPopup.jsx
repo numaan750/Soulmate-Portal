@@ -154,7 +154,7 @@ export default function ForgotPasswordPopup({ isOpen, onClose }) {
 
         <div className="flex justify-center mb-4">
           <Image
-            src="/images/Soulmate-logo.webp"
+            src="/images/Ai-Soulmate-Art.webp"
             alt="Logo"
             width={48}
             height={48}
