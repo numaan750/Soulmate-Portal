@@ -510,7 +510,7 @@ const SoulmateSidebar = () => {
                           className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                         >
                           <Image
-                            src="/images/Life-path.webp"
+                            src="/images/Life-Path.webp"
                             alt="Star icon"
                             width={48}
                             height={56}
