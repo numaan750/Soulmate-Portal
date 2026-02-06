@@ -78,8 +78,8 @@ const Emotional = () => {
     <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[550px] flex flex-col justify-between p-2 sm:p-0">
       <div className="text-[#FFFFFF] max-w-4xl flex flex-row items-start sm:items-center">
         <Image
-          src="/images/soulmate-logo.webp"
-          alt="soulmate-logo"
+          src="/images/Ai-Soulmate-Art.webp"
+          alt="Ai-Soulmate-Art.webp"
           width={31}
           height={31}
           className="rounded-full mr-2 sm:mr-4 w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 "
