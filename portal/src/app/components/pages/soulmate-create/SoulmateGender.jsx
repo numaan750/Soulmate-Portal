@@ -33,7 +33,7 @@ const Step1Welcome = ({ formData, onInputChange }) => {
             <div className="flex items-center gap-[8px] sm:gap-[12px]">
               <div className="w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] flex items-center justify-center rounded-full bg-white flex-shrink-0">
                 <Image
-                  src="/svgs/Male.svg"
+                  src="/svgs/MALE.svg"
                   alt="Male"
                   width={18}
                   height={18}
@@ -65,7 +65,7 @@ const Step1Welcome = ({ formData, onInputChange }) => {
             <div className="flex items-center gap-[8px] sm:gap-[12px]">
               <div className="w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] flex items-center justify-center rounded-full bg-white flex-shrink-0">
                 <Image
-                  src="/svgs/Female.svg"
+                  src="/svgs/FEMALE.svg"
                   alt="Female"
                   width={18}
                   height={18}
