@@ -64,8 +64,8 @@ const SoulmateSidebar = () => {
           <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
             <div className="flex items-center gap-2">
               <Image
-                src="/images2/soulmate-logo.webp"
-                alt="soulmate-logo.webp"
+                src="/images/Ai-Soulmate-Art.webp"
+                alt="Ai-Soulmate-Art.webp"
                 width={40}
                 height={40}
                 className="rounded-xl"
