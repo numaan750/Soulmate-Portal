@@ -170,7 +170,7 @@ const Login = () => {
           <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
             <div className="flex justify-center mb-2">
               <Image
-                src="/images/Soulmate-logo.webp"
+                src="/images/Ai-Soulmate-Art.webp"
                 alt="Logo"
                 width={48}
                 height={48}
