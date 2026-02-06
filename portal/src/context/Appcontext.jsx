@@ -415,90 +415,98 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const loginWithGoogle = () => {
-    return new Promise((resolve, reject) => {
-      try {
-        setError(null);
-        setLoading(true);
+  // const loginWithGoogle = () => {
+  //   return new Promise((resolve, reject) => {
+  //     try {
+  //       setError(null);
+  //       setLoading(true);
 
-        const width = 500;
-        const height = 600;
-        const left = window.screen.width / 2 - width / 2;
-        const top = window.screen.height / 2 - height / 2;
+  //       const width = 500;
+  //       const height = 600;
+  //       const left = window.screen.width / 2 - width / 2;
+  //       const top = window.screen.height / 2 - height / 2;
 
-        const googleAuthUrl = `${API_URL}/api/auth/google`;
+  //       const googleAuthUrl = `${API_URL}/api/auth/google`;
 
-        const popup = window.open(
-          googleAuthUrl,
-          'Google Login',
-          `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
-        );
+  //       const popup = window.open(
+  //         googleAuthUrl,
+  //         'Google Login',
+  //         `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
+  //       );
 
-        if (!popup) {
-          setError("Popup blocked! Please allow popups.");
-          setLoading(false);
-          reject(new Error("Popup blocked"));
-          return;
-        }
+  //       if (!popup) {
+  //         setError("Popup blocked! Please allow popups.");
+  //         setLoading(false);
+  //         reject(new Error("Popup blocked"));
+  //         return;
+  //       }
 
-        const handleMessage = (event) => {
-          if (event.origin !== window.location.origin) {
-            return;
-          }
+  //       const handleMessage = (event) => {
+  //         if (event.origin !== window.location.origin) {
+  //           return;
+  //         }
 
-          const { type, token, user, error } = event.data;
+  //         const { type, token, user, error } = event.data;
 
-          if (type === 'GOOGLE_AUTH_SUCCESS') {
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user));
+  //         if (type === 'GOOGLE_AUTH_SUCCESS') {
+  //           localStorage.setItem("token", token);
+  //           localStorage.setItem("user", JSON.stringify(user));
 
-            setToken(token);
-            setUser(user);
-            setAuthenticated(true);
-            setLoading(false);
+  //           setToken(token);
+  //           setUser(user);
+  //           setAuthenticated(true);
+  //           setLoading(false);
 
-            if (popup && !popup.closed) {
-              popup.close();
-            }
+  //           if (popup && !popup.closed) {
+  //             popup.close();
+  //           }
 
-            window.removeEventListener('message', handleMessage);
-            resolve({ status: 'success', user, token });
-          } else if (type === 'GOOGLE_AUTH_ERROR') {
-            setError(error || "Google login failed");
-            setLoading(false);
+  //           window.removeEventListener('message', handleMessage);
+  //           resolve({ status: 'success', user, token });
+  //         } else if (type === 'GOOGLE_AUTH_ERROR') {
+  //           setError(error || "Google login failed");
+  //           setLoading(false);
 
-            if (popup && !popup.closed) {
-              popup.close();
-            }
+  //           if (popup && !popup.closed) {
+  //             popup.close();
+  //           }
 
-            window.removeEventListener('message', handleMessage);
-            reject(new Error(error || "Google login failed"));
-          }
-        };
+  //           window.removeEventListener('message', handleMessage);
+  //           reject(new Error(error || "Google login failed"));
+  //         }
+  //       };
 
-        window.addEventListener('message', handleMessage);
+  //       window.addEventListener('message', handleMessage);
 
-        const checkPopupClosed = setInterval(() => {
-          if (popup.closed) {
-            clearInterval(checkPopupClosed);
-            window.removeEventListener('message', handleMessage);
-            setLoading(false);
+  //       const checkPopupClosed = setInterval(() => {
+  //         if (popup.closed) {
+  //           clearInterval(checkPopupClosed);
+  //           window.removeEventListener('message', handleMessage);
+  //           setLoading(false);
             
-            if (!authenticated) {
-              setError("Login cancelled");
-              reject(new Error("Login cancelled"));
-            }
-          }
-        }, 500);
+  //           if (!authenticated) {
+  //             setError("Login cancelled");
+  //             reject(new Error("Login cancelled"));
+  //           }
+  //         }
+  //       }, 500);
 
-      } catch (error) {
-        console.error("Google login error:", error);
-        setError("Failed to initiate Google login");
-        setLoading(false);
-        reject(error);
-      }
-    });
-  };
+  //     } catch (error) {
+  //       console.error("Google login error:", error);
+  //       setError("Failed to initiate Google login");
+  //       setLoading(false);
+  //       reject(error);
+  //     }
+  //   });
+  // };
+
+  const loginWithGoogle = () => {
+  setError(null);
+  setLoading(true);
+
+  window.location.href = `${API_URL}/api/auth/google`;
+};
+
 
   const loginWithApple = () => {
     return new Promise((resolve, reject) => {
