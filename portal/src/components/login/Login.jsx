@@ -147,7 +147,7 @@ const Login = () => {
       <div className="absolute inset-0 bg-[#0A090C]" />
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images2/Soulmate-background.webp')" }}
+        style={{ backgroundImage: "url('/images/Soulmate-background.webp')" }}
       ></div>
 
       <div className="relative min-h-screen flex flex-col lg:flex-row">
@@ -156,8 +156,8 @@ const Login = () => {
             <Image
               src={
                 isSignup
-                  ? "/images2/signup-Imag.webp"
-                  : "/images2/Login-imag.webp"
+                  ? "/images/signup-Imag.webp"
+                  : "/images/Login-imag.webp"
               }
               alt={isSignup ? "Cosmic Hands" : "Ethereal Woman"}
               fill
@@ -170,7 +170,7 @@ const Login = () => {
           <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
             <div className="flex justify-center mb-2">
               <Image
-                src="/images2/Soulmate-logo.webp"
+                src="/images/Soulmate-logo.webp"
                 alt="Logo"
                 width={48}
                 height={48}
