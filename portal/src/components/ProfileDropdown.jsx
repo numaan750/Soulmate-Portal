@@ -144,8 +144,7 @@ const ProfileDropdown = () => {
                   href="https://www.aisoulmatedrawings.com/conditions"
                   target="_blank"
                   className="text-white font-medium text-xs sm:text-sm"
-                >
-                  Terms of Use
+                >Terms of Use
                 </Link>
               </button>
               <button className="w-full cursor-pointer px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 hover:bg-gray-800/50 transition-all duration-200 group">
