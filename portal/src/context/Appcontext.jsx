@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export const AppContext = createContext();
@@ -14,6 +14,8 @@ const AppProvider = ({ children }) => {
   const [projectcache, setProjectcache] = useState({});
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [resetPasswordError, setResetPasswordError] = useState(null);
+  const authSuccessRef = useRef(false);
+
   const [soulmateCache, setSoulmateCache] = useState(() => {
     if (typeof window !== "undefined") {
       const cached = localStorage.getItem("soulmateCache");
@@ -427,6 +429,9 @@ const AppProvider = ({ children }) => {
       try {
         setError(null);
         setLoading(true);
+        authSuccessRef.current = false;
+
+        console.log("🚀 Initiating Google login");
 
         const width = 500;
         const height = 600;
@@ -434,6 +439,7 @@ const AppProvider = ({ children }) => {
         const top = window.screen.height / 2 - height / 2;
 
         const googleAuthUrl = `${API_URL}/api/auth/google`;
+        console.log("🔗 Opening Google Auth URL:", googleAuthUrl);
 
         const popup = window.open(
           googleAuthUrl,
@@ -450,12 +456,19 @@ const AppProvider = ({ children }) => {
 
         const handleMessage = (event) => {
           if (event.origin !== window.location.origin) {
+            console.warn("⚠️ Message from wrong origin:", event.origin);
             return;
           }
 
           const { type, token, user, error } = event.data;
+          console.log("📨 Received message:", type);
 
           if (type === "GOOGLE_AUTH_SUCCESS") {
+            authSuccessRef.current = true;
+
+            console.log("✅ Google auth successful");
+            console.log("👤 User:", user);
+
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
 
@@ -471,6 +484,9 @@ const AppProvider = ({ children }) => {
             window.removeEventListener("message", handleMessage);
             resolve({ status: "success", user, token });
           } else if (type === "GOOGLE_AUTH_ERROR") {
+            authSuccessRef.current = true;
+            console.error("❌ Google auth error:", error);
+
             setError(error || "Google login failed");
             setLoading(false);
 
@@ -491,26 +507,19 @@ const AppProvider = ({ children }) => {
             window.removeEventListener("message", handleMessage);
             setLoading(false);
 
-            if (!authenticated) {
+            if (!authSuccessRef.current) {
+              console.log("⚠️ Popup closed without auth");
               setError("Login cancelled");
               reject(new Error("Login cancelled"));
             }
           }
         }, 500);
       } catch (error) {
-        console.error("Google login error:", error);
+        console.error("❌ Google login error:", error);
         setError("Failed to initiate Google login");
         setLoading(false);
         reject(error);
       }
-    });
-  };
-
-  const loginWithApple = () => {
-    return new Promise((resolve, reject) => {
-      setError("Apple login coming soon!");
-      setLoading(false);
-      reject(new Error("Apple login not configured"));
     });
   };
 
@@ -685,7 +694,6 @@ const AppProvider = ({ children }) => {
         deleteSharedContent,
         // Google/Apple login
         loginWithGoogle,
-        loginWithApple,
         //soulmate create k liya
         createSoulmate,
         getUserSoulmate,

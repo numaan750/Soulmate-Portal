@@ -13,15 +13,12 @@ const loginSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: false,
+      required: function() {
+        return !this.googleId && !this.appleId;
+      },
     },
 
     googleId: {
-      type: String,
-      sparse: true,
-      unique: true,
-    },
-    appleId: {
       type: String,
       sparse: true,
       unique: true,
@@ -35,6 +32,8 @@ const loginSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+     resetPasswordToken: String,
+    resetPasswordExpires: Date,
 
     resetPasswordToken: {
       type: String,

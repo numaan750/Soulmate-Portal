@@ -56,6 +56,19 @@ export const signupUser = async (req, res) => {
         message: "Email required.",
       });
     }
+
+    // 🟢 FIX: Check for existing user by email OR googleId
+    const existingUser = await loginSchema.findOne({
+      $or: [{ email }, { googleId: { $exists: true, $ne: null } }],
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        status: "error",
+        message: "User already exists with this email.",
+      });
+    }
+
     if (!password) {
       return res.status(400).json({
         status: "error",
@@ -76,19 +89,16 @@ export const signupUser = async (req, res) => {
       });
     }
 
-    const existingUser = await loginSchema.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({
-        status: "error",
-        message: "User already exists with this email.",
-      });
-    }
     const hashedPassword = bcrypt.hashSync(password, 10);
+
+    // 🟢 FIX: Specify provider as 'local'
     const user = await loginSchema.create({
       email,
       password: hashedPassword,
       username,
+      provider: "local", // Add this
     });
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
