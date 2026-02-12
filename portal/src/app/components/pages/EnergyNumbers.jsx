@@ -89,7 +89,7 @@ const EnergyNumbers = () => {
           journey.
         </p>
       </div>
-      <div className="mt-4 space-y-3 max-h-[280px] overflow-y-auto px-2 scrollbar-hide">
+      <div className="mt-4 space-y-3 max-h-[400px] overflow-y-auto px-2 scrollbar-hide">
         {messages.map((msg, i) => (
           <div key={i} className="flex">
             <div

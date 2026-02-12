@@ -75,7 +75,7 @@ const AnyDream = () => {
   };
 
   return (
-    <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[500px] flex flex-col justify-between p-2 sm:p-0">
+    <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[550px] flex flex-col justify-between p-2 sm:p-0">
       <div className="text-[#FFFFFF] max-w-4xl flex flex-row items-start sm:items-center">
         <Image
           src="/images/Ai-Soulmate-Art.webp"
@@ -90,7 +90,7 @@ const AnyDream = () => {
         </p>
       </div>
 
-      <div className="mt-4 space-y-3 max-h-[280px] overflow-y-auto px-2 scrollbar-hide ">
+      <div className="mt-4 space-y-3 max-h-[400px] overflow-y-auto px-2 scrollbar-hide ">
         {messages.map((msg, i) => (
           <div key={i} className="flex">
             <div

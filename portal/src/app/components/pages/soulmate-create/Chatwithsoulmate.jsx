@@ -1,8 +1,11 @@
 "use client";
+import { AppContext } from "@/context/Appcontext";
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 
-const Chatwithsoulmate = () => {
+const Chatwithsoulmate = ({ soulmateData }) => {
+  const { chatWithSoulmate } = useContext(AppContext);
+
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -24,49 +27,70 @@ const Chatwithsoulmate = () => {
     }
   }, [messages]);
 
-  const sendQuickMessage = (text, index) => {
+  const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await chatWithSoulmate(text, soulmateData);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: `❤️ Soulmate Reply: "${text}" — I feel a deep emotional connection growing between us.`,
+          content: reply,
         },
       ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry, I couldn't respond right now. Please try again.",
+        },
+      ]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
+    const messageText = input;
     setInput("");
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await chatWithSoulmate(messageText, soulmateData);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "💞 I’m listening… your words mean a lot to me.",
+          content: reply,
         },
       ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry, I couldn't respond right now. Please try again.",
+        },
+      ]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
-    <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[500px] flex flex-col justify-between p-2 sm:p-0">
+    <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[550px] flex flex-col justify-between p-2 sm:p-0">
       <div className="text-[#FFFFFF] max-w-4xl flex flex-row items-start sm:items-center">
         <Image
           src="/images/Ai-Soulmate-Art.webp"
@@ -82,7 +106,7 @@ const Chatwithsoulmate = () => {
         </p>
       </div>
 
-      <div className="mt-4 space-y-3 max-h-[280px] overflow-y-auto px-2 scrollbar-hide">
+      <div className="mt-4 space-y-3 max-h-[400px] overflow-y-auto px-2 scrollbar-hide">
         {messages.map((msg, i) => (
           <div key={i} className="flex">
             <div

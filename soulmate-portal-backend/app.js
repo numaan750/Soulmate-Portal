@@ -9,6 +9,7 @@ import loginrouter from "./router/loginrouter.js";
 import aiRoutes from "./router/ai.routes.js";
 import sharerouter from "./router/sharerouter.js";
 import authRoutes from "./router/auth.routes.js";
+import soulmateRoutes from "./router/soulmate.routes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api", loginrouter);
 app.use("/api/auth", authRoutes);
 app.use("/api", aiRoutes);
 app.use("/api", sharerouter);
+app.use("/api", soulmateRoutes);
 
 // const PORT = process.env.PORT || 4000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
@@ -30,4 +32,4 @@ app.get("/", (req, res) => {
   res.send("🚀 Backend is running");
 });
 
-export default app
+export default app;

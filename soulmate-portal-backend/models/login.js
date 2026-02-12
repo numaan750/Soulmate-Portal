@@ -44,6 +44,18 @@ const loginSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    premiumExpiryDate: {
+      type: Date,
+      default: null,
+    },
+    soulmateCredits: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     timestamps: true,

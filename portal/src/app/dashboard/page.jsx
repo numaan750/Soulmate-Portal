@@ -79,7 +79,7 @@ const SoulmateSidebar = () => {
               <X size={24} />
             </button>
           </div>
-          <nav className="flex-1 ">
+          <nav>
             <button
               onClick={() => {
                 setActiveSection("home");
@@ -87,7 +87,7 @@ const SoulmateSidebar = () => {
                 setOpen(false);
               }}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
-                activeSection === "home" || activeSection === "find-soulmate"
+                activeSection === "home"
                   ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
@@ -104,6 +104,31 @@ const SoulmateSidebar = () => {
               />
               <span className=" font-medium text-[14px]">Home</span>
             </button>
+            <button
+              onClick={() => {
+                setActiveSection("find-soulmate");
+                setActiveSubTab(null);
+              }}
+              className={`w-full text-left cursor-pointer px-4 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
+                activeSection === "find-soulmate"
+                  ? "bg-[#222430] text-white shadow-lg"
+                  : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
+              }`}
+            >
+              <Image
+                src={
+                  activeSection === "find-soulmate"
+                    ? "/svgs/FIND-YOUR-SOULMATE-Active.svg"
+                    : "/svgs/FIND-YOUR-SOULMATE.svg"
+                }
+                alt="Home icon"
+                width={20}
+                height={20}
+              />
+              <span className=" font-medium text-[14px]">
+                Find Your Soulmate
+              </span>
+            </button>
             <div className="pt-4">
               <p className="text-[12px] text-[#59606C] tracking-wider px-4 mb-2">
                 Dream Wisdom
@@ -118,7 +143,7 @@ const SoulmateSidebar = () => {
               onClick={() => setIsPremiumPopupOpen(true)}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                 activeSection === "any-dream"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -129,10 +154,10 @@ const SoulmateSidebar = () => {
                     : "/svgs/Any-Dream.svg"
                 }
                 alt="Any-Dream."
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Any Dream</span>
+              <span className=" font-medium text-[14px]">Any Dream</span>
             </button>
             <button
               onClick={() => {
@@ -142,7 +167,7 @@ const SoulmateSidebar = () => {
               }}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                 activeSection === "nightmare"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -153,10 +178,10 @@ const SoulmateSidebar = () => {
                     : "/svgs/NIGHT-MARE.svg"
                 }
                 alt="NIGHT-MARE"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Nightmare Dream</span>
+              <span className=" font-medium text-[14px]">Nightmare Dream</span>
             </button>
             <button
               // onClick={() => {
@@ -167,7 +192,7 @@ const SoulmateSidebar = () => {
               onClick={() => setIsPremiumPopupOpen(true)}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                 activeSection === "day-dream"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -178,10 +203,10 @@ const SoulmateSidebar = () => {
                     : "/svgs/Day-Dream.svg"
                 }
                 alt="Day-Dream"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Day Dream</span>
+              <span className=" font-medium text-[14px]">Day Dream</span>
             </button>
             <button
               // onClick={() => {
@@ -192,7 +217,7 @@ const SoulmateSidebar = () => {
               onClick={() => setIsPremiumPopupOpen(true)}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                 activeSection === "emotional"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -203,10 +228,10 @@ const SoulmateSidebar = () => {
                     : "/svgs/Emotional-Dream.svg"
                 }
                 alt="Emotional-Dream"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Emotional Dream</span>
+              <span className=" font-medium text-[14px]">Emotional Dream</span>
             </button>
             <div className="pt-4">
               <p className="text-xs text-gray-500 tracking-wider px-4 mb-2">
@@ -222,7 +247,7 @@ const SoulmateSidebar = () => {
               onClick={() => setIsPremiumPopupOpen(true)}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                 activeSection === "life-path"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -233,10 +258,10 @@ const SoulmateSidebar = () => {
                     : "/svgs/Life-Path.svg"
                 }
                 alt="Life-Path"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Life Path</span>
+              <span className=" font-medium text-[14px]">Life Path</span>
             </button>
             <button
               onClick={() => {
@@ -246,7 +271,7 @@ const SoulmateSidebar = () => {
               }}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                 activeSection === "name-analysis"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -257,10 +282,10 @@ const SoulmateSidebar = () => {
                     : "/svgs/NAME-ANALYSIS.svg"
                 }
                 alt="Home icon"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Name Analysis</span>
+              <span className=" font-medium text-[14px]">Name Analysis</span>
             </button>
             <button
               // onClick={() => {
@@ -269,9 +294,9 @@ const SoulmateSidebar = () => {
               //   setOpen(false);
               // }}
               onClick={() => setIsPremiumPopupOpen(true)}
-              className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
+              className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 pb-4 ${
                 activeSection === "energy-numbers"
-                  ? "bg-gray-800 text-white shadow-lg"
+                  ? "bg-[#222430] text-white shadow-lg"
                   : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
               }`}
             >
@@ -282,37 +307,13 @@ const SoulmateSidebar = () => {
                     : "/svgs/ENERGY-NUMBERS.svg"
                 }
                 alt="Home icon"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
               />
-              <span className="text-sm font-medium">Energy Numbers</span>
+              <span className=" font-medium text-[14px]">Energy Numbers</span>
             </button>
           </nav>
-          <div className="border-t border-gray-800 pt-4 space-y-1">
-            <button
-              onClick={() => {
-                setActiveSection("my-gallery");
-                setActiveSubTab("my-gallery");
-                setOpen(false);
-              }}
-              className={`w-full text-left cursor-pointer px-4 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
-                activeSection === "my-gallery"
-                  ? "bg-gray-800 text-white shadow-lg"
-                  : "text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white"
-              }`}
-            >
-              <Image
-                src={
-                  activeSection === "my-gallery"
-                    ? "/svgs/My-Gallery-active.svg"
-                    : "/svgs/My-Gallery.svg"
-                }
-                alt="Home icon"
-                width={16}
-                height={16}
-              />
-              <span className="text-sm font-medium">My Gallery</span>
-            </button>
+          <div className="border-t border-gray-800 pt-4">
             <button
               onClick={() => setIsPremiumPopupOpen(true)}
               className="w-full text-left cursor-pointer px-4 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white group"
@@ -324,8 +325,8 @@ const SoulmateSidebar = () => {
                     : "/svgs/primium.svg"
                 }
                 alt="Home icon"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
                 className="opacity-70 group-hover:brightness-0 group-hover:invert transition-all duration-200"
               />
               <span className="text-sm font-medium">Premium Plans</span>
@@ -343,11 +344,9 @@ const SoulmateSidebar = () => {
                     {activeSection === "find-soulmate" &&
                       soulmateStepTitles[soulmateStep]}
                     {activeSection === "any-dream" && "Any Dream"}
-                    {activeSection === "nightmare" &&
-                      "Nightmare Dream"}
+                    {activeSection === "nightmare" && "Nightmare Dream"}
                     {activeSection === "day-dream" && "Day Dream"}
-                    {activeSection === "emotional" &&
-                      "Emotional Dream"}
+                    {activeSection === "emotional" && "Emotional Dream"}
                     {activeSection === "life-path" && "Life Path Reading"}
                     {activeSection === "name-analysis" && "Name"}
                     {activeSection === "energy-numbers" && "Energy Numbers"}
@@ -581,7 +580,10 @@ const SoulmateSidebar = () => {
                 {activeSection === "energy-numbers" && <EnergyNumbers />}
                 {activeSection === "my-gallery" && <MyGallery />}
                 {activeSection === "find-soulmate" && (
-                  <FindSoulmate setSoulmateStep={setSoulmateStep} />
+                  <FindSoulmate
+                    setSoulmateStep={setSoulmateStep}
+                    openPremiumPopup={() => setIsPremiumPopupOpen(true)}
+                  />
                 )}
 
                 {/* {activeSection === "premium-plans" && <PremiumPlans />} */}

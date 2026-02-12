@@ -23,7 +23,6 @@ const years = Array.from({ length: 116 }, (_, i) => String(2025 - i));
 
 const ScrollPicker = ({ items, selectedIndex, onIndexChange }) => {
   const containerRef = useRef(null);
-  // const itemHeight = 60;
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);

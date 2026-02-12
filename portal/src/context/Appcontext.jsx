@@ -14,7 +14,13 @@ const AppProvider = ({ children }) => {
   const [projectcache, setProjectcache] = useState({});
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [resetPasswordError, setResetPasswordError] = useState(null);
-
+  const [soulmateCache, setSoulmateCache] = useState(() => {
+    if (typeof window !== "undefined") {
+      const cached = localStorage.getItem("soulmateCache");
+      return cached ? JSON.parse(cached) : null;
+    }
+    return null;
+  });
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
@@ -105,7 +111,8 @@ const AppProvider = ({ children }) => {
     setUser(null);
     setAuthenticated(false);
     setProjectcache({});
-
+    setSoulmateCache(null);
+    localStorage.removeItem("soulmateCache");
     router.replace("/login");
   };
   const updateProfile = async (userId, updateData) => {
@@ -267,7 +274,7 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const sendAiChat = async (messages) => {
+  const sendAiChat = async (messages, type = "any_dream") => {
     try {
       setLoading(true);
 
@@ -277,7 +284,7 @@ const AppProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, type }),
       });
 
       const data = await response.json();
@@ -430,8 +437,8 @@ const AppProvider = ({ children }) => {
 
         const popup = window.open(
           googleAuthUrl,
-          'Google Login',
-          `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
+          "Google Login",
+          `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`,
         );
 
         if (!popup) {
@@ -448,7 +455,7 @@ const AppProvider = ({ children }) => {
 
           const { type, token, user, error } = event.data;
 
-          if (type === 'GOOGLE_AUTH_SUCCESS') {
+          if (type === "GOOGLE_AUTH_SUCCESS") {
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
 
@@ -461,9 +468,9 @@ const AppProvider = ({ children }) => {
               popup.close();
             }
 
-            window.removeEventListener('message', handleMessage);
-            resolve({ status: 'success', user, token });
-          } else if (type === 'GOOGLE_AUTH_ERROR') {
+            window.removeEventListener("message", handleMessage);
+            resolve({ status: "success", user, token });
+          } else if (type === "GOOGLE_AUTH_ERROR") {
             setError(error || "Google login failed");
             setLoading(false);
 
@@ -471,26 +478,25 @@ const AppProvider = ({ children }) => {
               popup.close();
             }
 
-            window.removeEventListener('message', handleMessage);
+            window.removeEventListener("message", handleMessage);
             reject(new Error(error || "Google login failed"));
           }
         };
 
-        window.addEventListener('message', handleMessage);
+        window.addEventListener("message", handleMessage);
 
         const checkPopupClosed = setInterval(() => {
           if (popup.closed) {
             clearInterval(checkPopupClosed);
-            window.removeEventListener('message', handleMessage);
+            window.removeEventListener("message", handleMessage);
             setLoading(false);
-            
+
             if (!authenticated) {
               setError("Login cancelled");
               reject(new Error("Login cancelled"));
             }
           }
         }, 500);
-
       } catch (error) {
         console.error("Google login error:", error);
         setError("Failed to initiate Google login");
@@ -506,6 +512,139 @@ const AppProvider = ({ children }) => {
       setLoading(false);
       reject(new Error("Apple login not configured"));
     });
+  };
+
+  const createSoulmate = async (soulmateData) => {
+    try {
+      setError(null);
+      setLoading(true);
+
+      const response = await fetch(`${API_URL}/api/soulmate/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(soulmateData),
+      });
+
+      const data = await response.json();
+
+      if (data.status === "error" && data.needsPremium) {
+        setLoading(false);
+        return { needsPremium: true };
+      }
+
+      if (data.status !== "success") {
+        setError(data.message);
+        throw new Error(data.message);
+      }
+      setSoulmateCache(data.data);
+      localStorage.setItem("soulmateCache", JSON.stringify(data.data));
+      setLoading(false);
+      return data;
+    } catch (error) {
+      console.error("Create soulmate error:", error);
+      setError("Failed to create soulmate.");
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  const getUserSoulmate = async () => {
+    try {
+      const cachedSoulmate = localStorage.getItem("soulmateCache");
+      if (cachedSoulmate) {
+        const parsed = JSON.parse(cachedSoulmate);
+        setSoulmateCache(parsed);
+        return parsed;
+      }
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`${API_URL}/api/soulmate/my-soulmate`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.status === "error") {
+        setSoulmateCache(null);
+        localStorage.removeItem("soulmateCache");
+        localStorage.removeItem("soulmateCache");
+        setLoading(false);
+        return null;
+      }
+
+      setSoulmateCache(data.data);
+      localStorage.setItem("soulmateCache", JSON.stringify(data.data));
+
+      setLoading(false);
+      return data.data;
+    } catch (error) {
+      console.error("Get soulmate error:", error);
+      setLoading(false);
+      return null;
+    }
+  };
+
+  const deleteSoulmate = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`${API_URL}/api/soulmate/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.status !== "success") {
+        setError(data.message);
+        throw new Error(data.message);
+      }
+      setSoulmateCache(null);
+      localStorage.removeItem("soulmateCache");
+      setLoading(false);
+      return data;
+    } catch (error) {
+      console.error("Delete soulmate error:", error);
+      setError("Failed to delete soulmate.");
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  const chatWithSoulmate = async (message, soulmateData) => {
+    try {
+      const response = await fetch(`${API_URL}/api/soulmate/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ message, soulmateData }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Chat failed");
+      }
+
+      return data.reply;
+    } catch (error) {
+      console.error("Soulmate Chat Error:", error);
+      throw error;
+    }
   };
 
   return (
@@ -547,6 +686,13 @@ const AppProvider = ({ children }) => {
         // Google/Apple login
         loginWithGoogle,
         loginWithApple,
+        //soulmate create k liya
+        createSoulmate,
+        getUserSoulmate,
+        deleteSoulmate,
+        chatWithSoulmate,
+        soulmateCache,
+        setSoulmateCache,
       }}
     >
       {children}
