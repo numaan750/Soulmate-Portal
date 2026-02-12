@@ -291,7 +291,7 @@ const Login = () => {
                 </button>
               </div>
 
-              <div className="flex items-center gap-4 my-2">
+              <div className="flex items-center gap-4">
                 <div className="flex-1 h-px bg-[#D9D9D9]" />
                 <span className="text-[#B6B6B6] text-[12px] sm:text-[14px] lg:text-[15px] whitespace-nowrap">
                   Or continue with
@@ -299,7 +299,7 @@ const Login = () => {
                 <div className="flex-1 h-px bg-[#D9D9D9]" />
               </div>
 
-              <div className="flex gap-5">
+              <div className="flex">
                 <button
                   type="button"
                   onClick={handleGoogleLogin}
@@ -328,7 +328,7 @@ const Login = () => {
                 </button>
               </div>
 
-              <p className="text-center text-[#B6B6B6] mt-2 text-[12px] sm:text-[14px] lg:text-[15px]">
+              <p className="text-center text-[#B6B6B6] text-[12px] sm:text-[14px] lg:text-[15px]">
                 {isSignup ? (
                   <>
                     Already have an account?{" "}
