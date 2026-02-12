@@ -17,38 +17,45 @@ passport.use(
         console.log("📧 Email:", profile.emails[0].value);
         console.log("🆔 Google ID:", profile.id);
 
-        // 🟢 STEP 1: First check if user exists by googleId
-        let user = await loginSchema.findOne({ googleId: profile.id });
+        const email = profile.emails[0].value;
+        const googleId = profile.id;
+
+        // ✅ STEP 1: Find user by email (regardless of how they signed up)
+        let user = await loginSchema.findOne({ email });
 
         if (user) {
-          console.log("✅ Existing Google user found - Logging in");
+          console.log("✅ User found with this email");
+
+          // ✅ STEP 2: Link Google ID to existing account if not already linked
+          if (!user.googleId) {
+            console.log("🔗 Linking Google account to existing user");
+            user.googleId = googleId;
+
+            // Update profile picture if user doesn't have one
+            if (!user.profilePicture && profile.photos && profile.photos[0]) {
+              user.profilePicture = profile.photos[0].value;
+            }
+
+            await user.save();
+            console.log("✅ Google account linked successfully");
+          } else {
+            console.log("✅ Google account already linked");
+          }
+
           return done(null, user);
         }
 
-        // 🟢 STEP 2: Check if email already exists (to link accounts)
-        user = await loginSchema.findOne({ email: profile.emails[0].value });
-
-        if (user) {
-          console.log("🔗 Linking Google to existing email account");
-          
-          // Update existing user with Google data
-          user.googleId = profile.id;
-          user.provider = "google";
-          user.profilePicture = profile.photos[0]?.value || user.profilePicture;
-          
-          await user.save();
-          console.log("✅ Account linked successfully");
-          return done(null, user);
-        }
-
-        // 🟢 STEP 3: Create new user only if no existing user found
+        // ✅ STEP 3: Create new user only if email doesn't exist
         console.log("➕ Creating new Google user");
         user = await loginSchema.create({
-          googleId: profile.id,
-          email: profile.emails[0].value,
+          googleId: googleId,
+          email: email,
           username: profile.displayName,
           provider: "google",
-          profilePicture: profile.photos[0]?.value || null,
+          profilePicture:
+            profile.photos && profile.photos[0]
+              ? profile.photos[0].value
+              : null,
           // Password is not required for Google users
         });
 
@@ -59,8 +66,8 @@ passport.use(
         console.error("Error details:", error.message);
         done(error, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {

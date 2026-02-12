@@ -11,10 +11,10 @@ const loginSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    password: {
+     password: {
       type: String,
       required: function() {
-        return !this.googleId && !this.appleId;
+        return this.provider === "local";
       },
     },
 
@@ -32,9 +32,6 @@ const loginSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-     resetPasswordToken: String,
-    resetPasswordExpires: Date,
-
     resetPasswordToken: {
       type: String,
       default: null,

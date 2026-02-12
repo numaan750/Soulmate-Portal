@@ -57,10 +57,8 @@ export const signupUser = async (req, res) => {
       });
     }
 
-    // 🟢 FIX: Check for existing user by email OR googleId
-    const existingUser = await loginSchema.findOne({
-      $or: [{ email }, { googleId: { $exists: true, $ne: null } }],
-    });
+    // ✅ CHANGE: Only check for existing user by email
+    const existingUser = await loginSchema.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({
@@ -91,12 +89,12 @@ export const signupUser = async (req, res) => {
 
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    // 🟢 FIX: Specify provider as 'local'
+    // ✅ CHANGE: Create with provider as 'local'
     const user = await loginSchema.create({
       email,
       password: hashedPassword,
       username,
-      provider: "local", // Add this
+      provider: "local",
     });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -141,6 +139,13 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({
         status: "error",
         message: "Invalid email or password.",
+      });
+    }
+
+    if (!user.password) {
+      return res.status(401).json({
+        status: "error",
+        message: "This account uses Google login. Please sign in with Google.",
       });
     }
     const isPasswordCorrect = bcrypt.compareSync(password, user.password);
