@@ -166,7 +166,9 @@ const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
   };
 
   return (
-    <div className="min-h-[50vh] bg-[#222430] text-white">
+    <div
+      className={`bg-[#222430] text-white flex flex-col ${currentStep === 8 ? "h-full" : "min-h-[50vh]"}`}
+    >
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
           <div className="bg-[#2A2D3A] rounded-2xl p-6 max-w-md w-full">
@@ -213,7 +215,7 @@ const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
       {currentStep !== null && (
         <>
           {currentStep <= 6 && (
-            <div className="max-w-5xl mx-auto mb-6 sm:mb-8 px-1 sm:px-0">
+            <div className="w-full mx-auto mb-6 sm:mb-8 flex-shrink-0 px-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] sm:text-[14px] text-gray-400">
                   Step {Math.min(currentStep, progressSteps)} of {progressSteps}
@@ -241,62 +243,68 @@ const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
       {currentStep !== null && (
         <div
           className={`mx-auto w-full ${
-            currentStep >= 7 ? "max-w-6xl" : "max-w-md sm:max-w-xl md:max-w-3xl"
+            currentStep === 8
+              ? "h-full flex-1 overflow-hidden"
+              : currentStep >= 7
+                ? "max-w-6xl"
+                : "max-w-md sm:max-w-xl md:max-w-3xl"
           }`}
         >
           {renderStep()}
 
-          <div className="flex flex-row flex-nowrap gap-4 mt-8 sm:mt-12 w-full">
-            {currentStep > 1 && currentStep <= 6 && (
-              <button
-                onClick={handlePrevious}
-                className="px-4 sm:px-6 py-2 flex cursor-pointer items-center gap-2 text-[16px] sm:text-[18px] text-[#AABFFF] font-semibold rounded-full hover:bg-[#AABFFF] hover:text-black transition-all"
-              >
-                <FaArrowLeft className="text-xs sm:text-sm" />
-                Back
-              </button>
-            )}
+          {currentStep !== 8 && (
+            <div className="flex flex-row flex-nowrap gap-4 mt-8 sm:mt-12 w-full">
+              {currentStep > 1 && currentStep <= 6 && (
+                <button
+                  onClick={handlePrevious}
+                  className="px-4 sm:px-6 py-2 flex cursor-pointer items-center gap-2 text-[16px] sm:text-[18px] text-[#AABFFF] font-semibold rounded-full hover:bg-[#AABFFF] hover:text-black transition-all"
+                >
+                  <FaArrowLeft className="text-xs sm:text-sm" />
+                  Back
+                </button>
+              )}
 
-            {currentStep < totalSteps && currentStep !== 7 && (
-              <button
-                onClick={handleNext}
-                disabled={
-                  (currentStep === 1 && !formData.gender) ||
-                  (currentStep === 2 && !formData.birthDate) ||
-                  (currentStep === 3 && !formData.ethnicBackground) ||
-                  (currentStep === 4 && !formData.vibe) ||
-                  (currentStep === 5 && !formData.birthplace) ||
-                  (currentStep === 6 && !formData.birthTime) ||
-                  isGenerating
-                }
-                className={`ml-auto sm:ml-auto px-4 sm:px-6 py-2 flex items-center gap-2 text-[16px] sm:text-[18px] font-semibold rounded-full transition-all ${
-                  (currentStep === 1 && !formData.gender) ||
-                  (currentStep === 2 && !formData.birthDate) ||
-                  (currentStep === 3 && !formData.ethnicBackground) ||
-                  (currentStep === 4 && !formData.vibe) ||
-                  (currentStep === 5 && !formData.birthplace) ||
-                  (currentStep === 6 && !formData.birthTime)
-                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                    : "bg-[#AABFFF] text-black cursor-pointer hover:bg-[#99AEFF]"
-                }`}
-              >
-                {currentStep === progressSteps ? (
-                  isGenerating ? (
-                    <div className="flex items-center gap-2">
-                      <span className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
-                      Generating...
-                    </div>
+              {currentStep < totalSteps && currentStep !== 7 && (
+                <button
+                  onClick={handleNext}
+                  disabled={
+                    (currentStep === 1 && !formData.gender) ||
+                    (currentStep === 2 && !formData.birthDate) ||
+                    (currentStep === 3 && !formData.ethnicBackground) ||
+                    (currentStep === 4 && !formData.vibe) ||
+                    (currentStep === 5 && !formData.birthplace) ||
+                    (currentStep === 6 && !formData.birthTime) ||
+                    isGenerating
+                  }
+                  className={`ml-auto sm:ml-auto px-4 sm:px-6 py-2 flex items-center gap-2 text-[16px] sm:text-[18px] font-semibold rounded-full transition-all ${
+                    (currentStep === 1 && !formData.gender) ||
+                    (currentStep === 2 && !formData.birthDate) ||
+                    (currentStep === 3 && !formData.ethnicBackground) ||
+                    (currentStep === 4 && !formData.vibe) ||
+                    (currentStep === 5 && !formData.birthplace) ||
+                    (currentStep === 6 && !formData.birthTime)
+                      ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                      : "bg-[#AABFFF] text-black cursor-pointer hover:bg-[#99AEFF]"
+                  }`}
+                >
+                  {currentStep === progressSteps ? (
+                    isGenerating ? (
+                      <div className="flex items-center gap-2">
+                        <span className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                        Generating...
+                      </div>
+                    ) : (
+                      "Generate"
+                    )
                   ) : (
-                    "Generate"
-                  )
-                ) : (
-                  "Next"
-                )}
+                    "Next"
+                  )}
 
-                <FaArrowRight />
-              </button>
-            )}
-          </div>
+                  <FaArrowRight />
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

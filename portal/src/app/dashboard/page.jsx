@@ -55,13 +55,13 @@ const SoulmateSidebar = () => {
       )}
       <div className="flex h-screen bg-black font-sans overflow-hidden">
         <aside
-          className={`fixed top-0 left-0 z-50 h-screen w-64 text-white p-6 flex flex-col overflow-y-auto hide-scrollbar transform transition-transform duration-300
+          className={`fixed top-0 left-0 z-50 h-screen w-64 text-white p-6 flex flex-col overflow-hidden transform transition-transform duration-300
            ${open ? "translate-x-0" : "-translate-x-full"}
            lg:translate-x-0 lg:static
           `}
         >
           {" "}
-          <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4">
+          <div className="flex items-center justify-between mb-4 border-b border-gray-800 pb-4 flex-shrink-0">
             <div className="flex items-center gap-2">
               <Image
                 src="/images/Ai-Soulmate-Art.webp"
@@ -79,7 +79,7 @@ const SoulmateSidebar = () => {
               <X size={24} />
             </button>
           </div>
-          <nav>
+          <nav className="flex-1 overflow-y-auto scrollbar-hide">
             <button
               onClick={() => {
                 setActiveSection("home");
@@ -313,7 +313,7 @@ const SoulmateSidebar = () => {
               <span className=" font-medium text-[14px]">Energy Numbers</span>
             </button>
           </nav>
-          <div className="border-t border-gray-800 pt-4">
+          <div className="border-t border-gray-800 pt-4 flex-shrink-0">
             <button
               onClick={() => setIsPremiumPopupOpen(true)}
               className="w-full text-left cursor-pointer px-4 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 text-[#F8F9FACC] hover:bg-gray-800/50 hover:text-white group"
@@ -334,11 +334,11 @@ const SoulmateSidebar = () => {
           </div>
         </aside>
         <div className="w-full lg:w-[80%] h-full bg-black flex overflow-hidden">
-          <main className="flex-1 bg-[#222430] text-white flex flex-col lg:mt-10 pt-16 lg:pt-0 rounded-t-2xl rounded-b-r-2xl">
-            <div className="flex-1 overflow-y-auto hide-scrollbar">
-              <div className="p-4 max-w-full">
+          <main className="flex-1 bg-[#222430] text-white flex flex-col lg:mt-10 pt-16 lg:pt-0 rounded-t-2xl rounded-b-r-2xl overflow-hidden">
+            <div className="flex-1 overflow-hidden flex flex-col">
+              <div className="p-4 max-w-full flex-1 flex flex-col overflow-hidden">
                 <div className="sticky top-0 z-10 bg-[#222430] flex items-center justify-between mb-8 border-b pb-2 border-[#AABFFF4D] px-2 py-2">
-                  <h3 className="text-[20px] font-bold tracking-tight flex ">
+                  <h3 className="text-[20px] font-bold tracking-tight flex">
                     {activeSection === "home" && "Home"}
 
                     {activeSection === "find-soulmate" &&
@@ -370,221 +370,238 @@ const SoulmateSidebar = () => {
                     <ProfileDropdown />
                   </div>
                 </div>
-                {activeSection === "home" && (
-                  <div className="space-y-6">
-                    <div className="relative">
-                      <Image
-                        src="/images/FIND-YOUR-SOULMATE.webp"
-                        alt="FIND-YOUR-SOULMATE"
-                        width={1200}
-                        height={300}
-                        className="w-full h-[160px] sm:h-[220px] md:h-[300px] object-cover md-object-contain rounded-3xl"
-                      />
-                      <div className="absolute inset-x-0 bottom-2 sm:bottom-4 flex justify-center items-center px-4">
-                        <button
-                          onClick={() => {
-                            setActiveSection("find-soulmate");
-                            setActiveSubTab(null);
-                          }}
-                          className="flex cursor-pointer items-center justify-between gap-2 sm:gap-12 bg-white/10 backdrop-blur-md text-white font-medium px-2 py-2 rounded-full shadow-lg border border-white/20 hover:bg-white/20 transition w-auto"
-                        >
-                          <span className="whitespace-nowrap ml-2 cursor-pointer  text-[14px] sm:text-[18px]">
-                            Find Your Soulmate
-                          </span>
+                <div
+                  className={`flex-1 flex flex-col ${
+                    [
+                      "any-dream",
+                      "nightmare",
+                      "day-dream",
+                      "emotional",
+                      "life-path",
+                      "name-analysis",
+                      "energy-numbers",
+                    ].includes(activeSection)
+                      ? "overflow-hidden"
+                      : "overflow-y-auto scrollbar-hide"
+                  }`}
+                >
+                  {" "}
+                  {activeSection === "home" && (
+                    <div className="space-y-6">
+                      <div className="relative">
+                        <Image
+                          src="/images/FIND-YOUR-SOULMATE.webp"
+                          alt="FIND-YOUR-SOULMATE"
+                          width={1200}
+                          height={300}
+                          className="w-full h-[160px] sm:h-[220px] md:h-[300px] object-cover md-object-contain rounded-3xl"
+                        />
+                        <div className="absolute inset-x-0 bottom-2 sm:bottom-4 flex justify-center items-center px-4">
+                          <button
+                            onClick={() => {
+                              setActiveSection("find-soulmate");
+                              setActiveSubTab(null);
+                            }}
+                            className="flex cursor-pointer items-center justify-between gap-2 sm:gap-12 bg-white/10 backdrop-blur-md text-white font-medium px-2 py-2 rounded-full shadow-lg border border-white/20 hover:bg-white/20 transition w-auto"
+                          >
+                            <span className="whitespace-nowrap ml-2 cursor-pointer  text-[14px] sm:text-[18px]">
+                              Find Your Soulmate
+                            </span>
 
-                          <span className="flex items-center justify-center rounded-full bg-[#AABFFF] w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0">
-                            <Image
-                              src="/svgs/Home-button-errow.svg"
-                              alt="Arrow icon"
-                              width={10}
-                              height={10}
-                              className="w-2 h-2 sm:w-2.5 sm:h-2.5"
-                            />
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold mb-4 text-gray-200">
-                        Dream Wisdom
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-                        <div
-                          onClick={() => setActiveSection("any-dream")}
-                          // onClick={() => setIsPremiumPopupOpen(true)}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/ANY-DREAM.webp"
-                            alt="Star icon"
-                            height={48}
-                            width={48}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Any Dream
-                          </span>
-                          <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
-                            <Image
-                              src="/svgs/get-pro.svg"
-                              alt="Star icon"
-                              width={16}
-                              height={16}
-                            />
-                          </div>
-                        </div>
-                        <div
-                          onClick={() => setActiveSection("nightmare")}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/NIGHT-MARE.webp"
-                            alt="Star icon"
-                            width={48}
-                            height={56}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Nightmare
-                          </span>
-                        </div>
-                        <div
-                          onClick={() => setActiveSection("day-dream")}
-                          // onClick={() => setIsPremiumPopupOpen(true)}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/DAY-DREAM.webp"
-                            alt="Star icon"
-                            width={48}
-                            height={56}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Day Dream
-                          </span>
-                          <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
-                            <Image
-                              src="/svgs/get-pro.svg"
-                              alt="Star icon"
-                              width={16}
-                              height={16}
-                            />
-                          </div>
-                        </div>
-                        <div
-                          onClick={() => setActiveSection("emotional")}
-                          // onClick={() => setIsPremiumPopupOpen(true)}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/EMOTIONAL.webp"
-                            alt="Star icon"
-                            width={48}
-                            height={56}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Emotional
-                          </span>
-                          <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
-                            <Image
-                              src="/svgs/get-pro.svg"
-                              alt="Star icon"
-                              width={16}
-                              height={16}
-                            />
-                          </div>
+                            <span className="flex items-center justify-center rounded-full bg-[#AABFFF] w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0">
+                              <Image
+                                src="/svgs/Home-button-errow.svg"
+                                alt="Arrow icon"
+                                width={10}
+                                height={10}
+                                className="w-2 h-2 sm:w-2.5 sm:h-2.5"
+                              />
+                            </span>
+                          </button>
                         </div>
                       </div>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold mb-4 text-gray-200">
-                        Numerology
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-                        <div
-                          onClick={() => setActiveSection("life-path")}
-                          // onClick={() => setIsPremiumPopupOpen(true)}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/Life-Path.webp"
-                            alt="Star icon"
-                            width={48}
-                            height={56}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Life Path
-                          </span>
-                          <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                      <div>
+                        <h4 className="text-xl font-bold mb-4 text-gray-200">
+                          Dream Wisdom
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                          <div
+                            onClick={() => setActiveSection("any-dream")}
+                            // onClick={() => setIsPremiumPopupOpen(true)}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
                             <Image
-                              src="/svgs/get-pro.svg"
+                              src="/images/ANY-DREAM.webp"
                               alt="Star icon"
-                              width={16}
-                              height={16}
+                              height={48}
+                              width={48}
+                              className="h-12 w-10 object-contain"
                             />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Any Dream
+                            </span>
+                            <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                              <Image
+                                src="/svgs/get-pro.svg"
+                                alt="Star icon"
+                                width={16}
+                                height={16}
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          onClick={() => setActiveSection("name-analysis")}
-                          // onClick={() => setIsPremiumPopupOpen(true)}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/NAME-ANALYSIS.webp"
-                            alt="Star icon"
-                            width={48}
-                            height={56}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Name Analysis
-                          </span>
-                        </div>
-                        <div
-                          onClick={() => setActiveSection("energy-numbers")}
-                          // onClick={() => setIsPremiumPopupOpen(true)}
-                          className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
-                        >
-                          <Image
-                            src="/images/ENERGY-NUMBERS.webp"
-                            alt="Star icon"
-                            width={48}
-                            height={56}
-                            className="h-12 w-10 object-contain"
-                          />
-                          <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
-                            Energy Number
-                          </span>
-                          <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                          <div
+                            onClick={() => setActiveSection("nightmare")}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
                             <Image
-                              src="/svgs/get-pro.svg"
+                              src="/images/NIGHT-MARE.webp"
                               alt="Star icon"
-                              width={16}
-                              height={16}
+                              width={48}
+                              height={56}
+                              className="h-12 w-10 object-contain"
                             />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Nightmare
+                            </span>
+                          </div>
+                          <div
+                            onClick={() => setActiveSection("day-dream")}
+                            // onClick={() => setIsPremiumPopupOpen(true)}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
+                            <Image
+                              src="/images/DAY-DREAM.webp"
+                              alt="Star icon"
+                              width={48}
+                              height={56}
+                              className="h-12 w-10 object-contain"
+                            />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Day Dream
+                            </span>
+                            <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                              <Image
+                                src="/svgs/get-pro.svg"
+                                alt="Star icon"
+                                width={16}
+                                height={16}
+                              />
+                            </div>
+                          </div>
+                          <div
+                            onClick={() => setActiveSection("emotional")}
+                            // onClick={() => setIsPremiumPopupOpen(true)}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
+                            <Image
+                              src="/images/EMOTIONAL.webp"
+                              alt="Star icon"
+                              width={48}
+                              height={56}
+                              className="h-12 w-10 object-contain"
+                            />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Emotional
+                            </span>
+                            <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                              <Image
+                                src="/svgs/get-pro.svg"
+                                alt="Star icon"
+                                width={16}
+                                height={16}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <div>
+                        <h4 className="text-xl font-bold mb-4 text-gray-200">
+                          Numerology
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                          <div
+                            onClick={() => setActiveSection("life-path")}
+                            // onClick={() => setIsPremiumPopupOpen(true)}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
+                            <Image
+                              src="/images/Life-Path.webp"
+                              alt="Star icon"
+                              width={48}
+                              height={56}
+                              className="h-12 w-10 object-contain"
+                            />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Life Path
+                            </span>
+                            <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                              <Image
+                                src="/svgs/get-pro.svg"
+                                alt="Star icon"
+                                width={16}
+                                height={16}
+                              />
+                            </div>
+                          </div>
+                          <div
+                            onClick={() => setActiveSection("name-analysis")}
+                            // onClick={() => setIsPremiumPopupOpen(true)}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
+                            <Image
+                              src="/images/NAME-ANALYSIS.webp"
+                              alt="Star icon"
+                              width={48}
+                              height={56}
+                              className="h-12 w-10 object-contain"
+                            />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Name Analysis
+                            </span>
+                          </div>
+                          <div
+                            onClick={() => setActiveSection("energy-numbers")}
+                            // onClick={() => setIsPremiumPopupOpen(true)}
+                            className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
+                          >
+                            <Image
+                              src="/images/ENERGY-NUMBERS.webp"
+                              alt="Star icon"
+                              width={48}
+                              height={56}
+                              className="h-12 w-10 object-contain"
+                            />
+                            <span className="text-white font-semibold text-sm sm:text-base md:text-[18px]">
+                              Energy Number
+                            </span>
+                            <div className="absolute top-3 right-3 bg-[#AABFFF] rounded-xl p-2">
+                              <Image
+                                src="/svgs/get-pro.svg"
+                                alt="Star icon"
+                                width={16}
+                                height={16}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                )}
-                {activeSection === "any-dream" && <AnyDream />}
-                {activeSection === "nightmare" && <Nightmare />}
-                {activeSection === "day-dream" && <DayDream />}
-                {activeSection === "emotional" && <Emotional />}
-                {activeSection === "life-path" && <LifePath />}
-                {activeSection === "name-analysis" && <NameAnalysis />}
-                {activeSection === "energy-numbers" && <EnergyNumbers />}
-                {activeSection === "my-gallery" && <MyGallery />}
-                {activeSection === "find-soulmate" && (
-                  <FindSoulmate
-                    setSoulmateStep={setSoulmateStep}
-                    openPremiumPopup={() => setIsPremiumPopupOpen(true)}
-                  />
-                )}
+                  )}
+                  {activeSection === "any-dream" && <AnyDream />}
+                  {activeSection === "nightmare" && <Nightmare />}
+                  {activeSection === "day-dream" && <DayDream />}
+                  {activeSection === "emotional" && <Emotional />}
+                  {activeSection === "life-path" && <LifePath />}
+                  {activeSection === "name-analysis" && <NameAnalysis />}
+                  {activeSection === "energy-numbers" && <EnergyNumbers />}
+                  {activeSection === "my-gallery" && <MyGallery />}
+                  {activeSection === "find-soulmate" && (
+                    <FindSoulmate
+                      setSoulmateStep={setSoulmateStep}
+                      openPremiumPopup={() => setIsPremiumPopupOpen(true)}
+                    />
+                  )}
+                </div>
 
                 {/* {activeSection === "premium-plans" && <PremiumPlans />} */}
               </div>

@@ -90,8 +90,8 @@ const Chatwithsoulmate = ({ soulmateData }) => {
   };
 
   return (
-    <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[550px] flex flex-col justify-between p-2 sm:p-0">
-      <div className="text-[#FFFFFF] max-w-4xl flex flex-row items-start sm:items-center">
+    <div className="h-full flex flex-col">
+      <div className="text-[#FFFFFF] flex flex-row items-start sm:items-center flex-shrink-0 p-2 sm:p-4">
         <Image
           src="/images/Ai-Soulmate-Art.webp"
           alt="Ai-Soulmate-Art.webp"
@@ -106,51 +106,54 @@ const Chatwithsoulmate = ({ soulmateData }) => {
         </p>
       </div>
 
-      <div className="mt-4 space-y-3 max-h-[400px] overflow-y-auto px-2 scrollbar-hide">
-        {messages.map((msg, i) => (
-          <div key={i} className="flex">
-            <div
-              className={`px-4 py-2 rounded-xl break-words text-[16px] max-w-full sm:max-w-[60%]
+      <div className="flex-1 overflow-y-auto px-2 sm:px-4 scrollbar-hide">
+        <div className="space-y-3 py-4">
+          {" "}
+          {messages.map((msg, i) => (
+            <div key={i} className="flex">
+              <div
+                className={`px-4 py-2 rounded-xl break-words text-[16px] max-w-full sm:max-w-[60%]
                ${
                  msg.role === "user"
                    ? "bg-[#35384A] text-white ml-auto"
                    : "text-gray-200 mr-auto"
                }`}
-            >
-              {msg.content}
+              >
+                {msg.content}
+              </div>
             </div>
-          </div>
-        ))}
-
-        {loading && (
-          <div className="flex">
-            <div className="px-4 py-2 rounded-xl bg-gray-700 text-gray-200 mr-auto">
-              Soulmate is typing...
+          ))}
+          {loading && (
+            <div className="flex">
+              <div className="px-4 py-2 rounded-xl bg-gray-700 text-gray-200 mr-auto">
+                Soulmate is typing...
+              </div>
             </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
-      <div className="space-y-3 sm:space-y-4">
-        <div className="flex flex-nowrap overflow-x-auto gap-2 sm:gap-3 ml-0 sm:ml-2 scrollbar-hide">
-          {quickPrompts.map((text, index) => (
-            <button
-              key={index}
-              onClick={() => sendQuickMessage(text, index)}
-              className={`${
-                hiddenPrompts.includes(index)
-                  ? "bg-[#35384A] text-gray-200"
-                  : "bg-[#2A2D3A] text-[#F8F9FA]"
-              }
+      <div className="flex-shrink-0 p-2 sm:p-4">
+        <div className="space-y-3 sm:space-y-4 mb-4">
+          <div className="flex flex-nowrap overflow-x-auto gap-2 sm:gap-3 ml-0 sm:ml-8 scrollbar-hide">
+            {quickPrompts.map((text, index) => (
+              <button
+                key={index}
+                onClick={() => sendQuickMessage(text, index)}
+                className={`${
+                  hiddenPrompts.includes(index)
+                    ? "bg-[#35384A] text-gray-200"
+                    : "bg-[#2A2D3A] text-[#F8F9FA]"
+                }
               px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl
               text-[12px] sm:text-[14px] md:text-[16px]
               hover:bg-[#35384A] transition flex-shrink-0 cursor-pointer`}
-            >
-              {text}
-            </button>
-          ))}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex items-center bg-[#2A2D3A] rounded-full px-3 sm:px-4 py-3 sm:py-4">

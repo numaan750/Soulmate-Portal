@@ -75,8 +75,8 @@ const DayDream = () => {
   };
 
   return (
-    <div className="min-h-[400px] sm:min-h-[450px] lg:min-h-[550px] flex flex-col justify-between p-2 sm:p-0">
-      <div className="text-[#FFFFFF] max-w-4xl flex flex-row items-start sm:items-center">
+    <div className="flex flex-col h-full overflow-hidden">
+      <div className="text-[#FFFFFF] flex flex-row items-start sm:items-center mb-4">
         <Image
           src="/images/Ai-Soulmate-Art.webp"
           alt="Ai-Soulmate-Art.webp"
@@ -90,11 +90,11 @@ const DayDream = () => {
         </p>
       </div>
 
-      <div className="mt-4 space-y-3 max-h-[400px] overflow-y-auto px-2 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto space-y-3 px-2 scrollbar-hide mb-4 min-h-0">
         {messages.map((msg, i) => (
           <div key={i} className="flex">
             <div
-              className={`px-4 py-2 rounded-xl break-words break-all text-[16px] max-w-full sm:max-w-[60%]
+              className={`px-4 py-2 rounded-xl break-words text-[16px] max-w-full sm:max-w-[60%]
           ${
             msg.role === "user"
               ? "bg-[#35384A] text-white ml-auto"
@@ -117,7 +117,7 @@ const DayDream = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="space-y-3 sm:space-y-4">
+      <div className="space-y-3 sm:space-y-4 flex-shrink-0">
         <div className="flex flex-nowrap overflow-x-auto gap-2 sm:gap-3 ml-0 sm:ml-8 scrollbar-hide">
           {quickPrompts.map((text, index) => (
             <button
