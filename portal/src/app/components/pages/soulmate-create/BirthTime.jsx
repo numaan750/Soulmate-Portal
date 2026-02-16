@@ -126,7 +126,7 @@ const ScrollPicker = ({ items, selectedIndex, onIndexChange }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onWheel={handleWheel}
-        className="h-[144px] sm:h-[168px] md:h-[180px] overflow-y-scroll cursor-grab active:cursor-grabbing relative picker-scrollbar"
+        className="h-[144px] sm:h-[168px] md:h-[180px] w-full overflow-y-scroll cursor-grab active:cursor-grabbing relative picker-scrollbar"
         style={{
           scrollSnapType: "y mandatory",
           scrollBehavior: isDragging ? "auto" : "smooth",
