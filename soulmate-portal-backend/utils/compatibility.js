@@ -1,42 +1,86 @@
+import { openai } from "../config/ai.config.js";
+
 export const calculateCompatibility = (birthDate, birthTime) => {
   const baseScore = 85;
   const randomBonus = Math.floor(Math.random() * 15);
   return baseScore + randomBonus;
 };
 
-export const generateInsights = (score, vibe) => {
-  const insights = {
-    strengths: "",
-    weaknesses: "",
-    compatibility: "",
-    glimpse: "",
-  };
+export const generateInsights = async (
+  birthDate,
+  gender,
+  ethnicBackground,
+  vibe,
+  birthplace,
+  birthTime,
+) => {
+  try {
+    const ethnicText = ethnicBackground.replace(/-/g, " ");
 
-  if (score >= 95) {
-    insights.strengths =
-      "You and your soulmate share exceptional emotional support, with deep respect forming the foundation of your bond. Together, you can overcome any challenge and grow stronger through life's journey.";
-    insights.weaknesses =
-      "Occasional perfectionism may create minor tension. Remember to embrace imperfections together and allow space for individual growth.";
-    insights.compatibility =
-      "You share an extraordinary emotional understanding. Your differences perfectly complement each other, creating remarkable balance and endless opportunities for long-term growth.";
-    insights.glimpse = `Your perfect soulmate embodies ${vibe} energy, balancing your soul with profound emotional depth and creating an unmatched harmony that transcends ordinary connections.`;
-  } else if (score >= 90) {
-    insights.strengths =
-      "You and your soulmate share strong emotional support, with mutual respect and understanding as your foundation. Together, you create a nurturing environment for growth.";
-    insights.weaknesses =
-      "At times, mood swings or misunderstandings may create temporary distance. Open communication and patience will help you maintain balance and individuality.";
-    insights.compatibility =
-      "You share a natural emotional understanding that creates harmony. Your differences create perfect balance, offering opportunities for continuous growth and deeper connection.";
-    insights.glimpse = `Your perfect soulmate's ${vibe} nature balances your practicality with deep emotions, creating lasting harmony and a bond filled with compassion and understanding.`;
-  } else {
-    insights.strengths =
-      "You and your soulmate share emotional support and growing respect. Your connection offers a solid foundation for building something meaningful together.";
-    insights.weaknesses =
-      "Communication gaps may occasionally arise. Both partners must work to maintain individuality while nurturing the relationship's growth.";
-    insights.compatibility =
-      "You share good emotional understanding with room for deeper connection. Your journey together will be one of discovery and mutual development.";
-    insights.glimpse = `Your soulmate's ${vibe} personality complements your energy, offering opportunities for mutual growth and creating a bond that strengthens over time.`;
+    const messages = [
+      {
+        role: "system",
+        content: `You are a ${gender} soulmate.
+User details:
+- Date of Birth: ${birthDate}
+- Ethnic Background: ${ethnicText}
+- Imagination Vibe: ${vibe}
+- Place of Birth: ${birthplace}
+- Time of Birth: ${birthTime}
+
+Your job: Generate a JSON response with exactly these four titles, each with a short, creative subtitle based on the user's details.
+Each subtitle MUST be between 30 and 40 words — no more, no less.
+Keep the tone ${vibe}.`,
+      },
+      {
+        role: "user",
+        content: `Return strictly a JSON object in this format:
+
+{
+  "A glimpse into your connection": "subtitle here",
+  "Compatibility": "subtitle here",
+  "Strengths": "subtitle here",
+  "Weaknesses": "subtitle here"
+}
+
+Do not change the titles. Just fill in the subtitles based on the soulmate interpretation. 
+Follow the 30-40 word limit for each subtitle.`,
+      },
+    ];
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: messages,
+      temperature: 0.7,
+      max_tokens: 500,
+    });
+
+    const content = response.choices[0].message.content;
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+
+    if (!jsonMatch) {
+      throw new Error("Failed to parse AI response");
+    }
+
+    const parsedInsights = JSON.parse(jsonMatch[0]);
+
+    return {
+      glimpse: parsedInsights["A glimpse into your connection"],
+      compatibility: parsedInsights["Compatibility"],
+      strengths: parsedInsights["Strengths"],
+      weaknesses: parsedInsights["Weaknesses"],
+    };
+  } catch (error) {
+    console.error("Generate insights error:", error);
+    // Fallback to default insights
+    return {
+      strengths:
+        "You and your soulmate share emotional support, with respect forming the foundation of your bond. Together, you can overcome challenges and grow stronger.",
+      weaknesses:
+        "At times, mood swings or misunderstandings may create distance. To sustain balance, both must maintain individuality.",
+      compatibility:
+        "You and your soulmate share a natural emotional understanding. Your differences complement each other, creating balance and long-term growth.",
+      glimpse: `Your perfect soulmate embodies ${vibe} energy, creating a profound connection that balances your soul with deep emotions and understanding.`,
+    };
   }
-
-  return insights;
 };

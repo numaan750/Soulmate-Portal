@@ -48,45 +48,47 @@ const Step7VisualStyle = ({
     return dateStr;
   };
 
-  const styles = [
-    {
-      title: "Strengths",
-      description:
-        soulmateData?.strengths ||
-        "You and your soulmate share emotional support, with respect forming the foundation of your bond. Together, you can overcome challenges and grow stronger.",
-    },
-    {
-      title: "Weaknesses",
-      description:
-        soulmateData?.weaknesses ||
-        "At times, mood swings or misunderstandings may create distance. To sustain balance, both must maintain individuality.",
-    },
-    {
-      title: "Compatibility",
-      description:
-        soulmateData?.compatibility ||
-        "You and your soulmate share a natural emotional understanding. Your differences complement each other, creating balance and long-term growth",
-    },
-    {
-      title: "A glimpse into your connection",
-      description:
-        soulmateData?.glimpse ||
-        "Your perfect soulmate is Pisces because they balance your practicality with deep emotions. Together, you create harmony and a bond filled with compassion.",
-    },
-  ];
+const styles = [
+  {
+    title: "A glimpse into your connection",
+    description:
+      soulmateData?.glimpse ||
+      "Your perfect soulmate is Pisces because they balance your practicality with deep emotions. Together, you create harmony and a bond filled with compassion.",
+  },
+  {
+    title: "Compatibility",
+    description:
+      soulmateData?.compatibility ||
+      "You and your soulmate share a natural emotional understanding. Your differences complement each other, creating balance and long-term growth",
+  },
+  {
+    title: "Strengths",
+    description:
+      soulmateData?.strengths ||
+      "You and your soulmate share emotional support, with respect forming the foundation of your bond. Together, you can overcome challenges and grow stronger.",
+  },
+  {
+    title: "Weaknesses",
+    description:
+      soulmateData?.weaknesses ||
+      "At times, mood swings or misunderstandings may create distance. To sustain balance, both must maintain individuality.",
+  },
+];
 
   const handleShare = async () => {
     try {
       setIsSharing(true);
 
       const shareData = {
-        imageUrl: "/images/Result.webp",
+        imageUrl: soulmateData?.imageUrl,
         title: "My Soulmate Sketch",
         description: "Check out my soulmate compatibility reading!",
-        compatibilityScore: 96,
-        birthDate: "01 Jan 2002",
-        ethnicity: "Middle Eastern",
-        personality: "Romantic",
+        compatibilityScore: soulmateData?.compatibilityScore,
+        birthDate: formatBirthDate(soulmateData?.birthDate),
+        ethnicity: capitalizeWords(
+          soulmateData?.ethnicBackground?.replace(/-/g, " "),
+        ),
+        personality: capitalizeWords(soulmateData?.vibe),
       };
 
       const result = await createShareableLink(shareData);
@@ -129,8 +131,9 @@ const Step7VisualStyle = ({
     }
   };
 
-  if (!soulmateData) return null;
-
+  if (!soulmateData?.imageUrl) {
+    return <div className="text-white">Loading soulmate...</div>;
+  }
   return (
     <div className="space-y-6 animate-fadeIn">
       <h2 className="text-[18px] sm:text-[20px] md:text-[24px] font-semibold">

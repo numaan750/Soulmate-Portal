@@ -539,24 +539,23 @@ const AppProvider = ({ children }) => {
 
       const data = await response.json();
 
-      if (data.status === "error" && data.needsPremium) {
-        setLoading(false);
-        return { needsPremium: true };
+      if (!response.ok) {
+        if (data.needsPremium) {
+          return { needsPremium: true };
+        }
+        throw new Error(data.message || "Soulmate creation failed");
       }
 
-      if (data.status !== "success") {
-        setError(data.message);
-        throw new Error(data.message);
-      }
       setSoulmateCache(data.data);
       localStorage.setItem("soulmateCache", JSON.stringify(data.data));
-      setLoading(false);
+
       return data;
     } catch (error) {
       console.error("Create soulmate error:", error);
-      setError("Failed to create soulmate.");
-      setLoading(false);
+      setError(error.message || "Failed to create soulmate.");
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -583,7 +582,6 @@ const AppProvider = ({ children }) => {
 
       if (data.status === "error") {
         setSoulmateCache(null);
-        localStorage.removeItem("soulmateCache");
         localStorage.removeItem("soulmateCache");
         setLoading(false);
         return null;
@@ -632,15 +630,20 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const chatWithSoulmate = async (message, soulmateData) => {
+  const chatWithSoulmate = async (messages, soulmateData) => {
     try {
+      setLoading(true);
+
       const response = await fetch(`${API_URL}/api/soulmate/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ message, soulmateData }),
+        body: JSON.stringify({
+          messages,
+          soulmateData,
+        }),
       });
 
       const data = await response.json();
@@ -653,6 +656,8 @@ const AppProvider = ({ children }) => {
     } catch (error) {
       console.error("Soulmate Chat Error:", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 

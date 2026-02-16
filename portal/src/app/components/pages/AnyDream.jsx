@@ -28,23 +28,27 @@ const AnyDream = () => {
     }
   }, [messages]);
 
-  const sendQuickMessage = (text, index) => {
+  const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await sendAiChat([userMsg], "any_dream");
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (error) {
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: `🧠 Dream Insight: You mentioned "${text}". This dream may symbolise hidden thoughts or emotions you are processing.`,
+          content: "Something went wrong. Please try again.",
         },
       ]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const sendMessage = async () => {
@@ -52,14 +56,12 @@ const AnyDream = () => {
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
-
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
 
     try {
-      const reply = await sendAiChat([...messages, userMsg]);
-
+      const reply = await sendAiChat([...messages, userMsg], "any_dream");
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (error) {
       setMessages((prev) => [

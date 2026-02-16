@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useContext, useState, useRef, useEffect } from "react";
 
 const Nightmare = () => {
-  const { token } = useContext(AppContext);
+  const { token, sendAiChat } = useContext(AppContext);
 
   const [input, setInput] = useState("");
   const [hiddenPrompts, setHiddenPrompts] = useState([]);
@@ -28,23 +28,28 @@ const Nightmare = () => {
     }
   }, [messages]);
 
-  const sendQuickMessage = (text, index) => {
+  const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await sendAiChat([userMsg], "nightmare");
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (err) {
+      console.error(err);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: `🌙 Nightmare Insight: You mentioned "${text}". This nightmare may reflect fears or anxieties you're processing.`,
+          content: "⚠️ Something went wrong. Please try again.",
         },
       ]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const sendMessage = async () => {
@@ -52,34 +57,22 @@ const Nightmare = () => {
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
-
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/ai/chat`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            messages: [...messages, userMsg],
-          }),
-        },
-      );
-
-      const data = await res.json();
-
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.reply },
-      ]);
+      const reply = await sendAiChat([...messages, userMsg], "nightmare");
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       console.error(err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "⚠️ Something went wrong. Please try again.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }

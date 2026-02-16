@@ -86,6 +86,7 @@ const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
 
         if (result?.data) {
           setGeneratedSoulmate(result.data);
+          setSoulmateCache(result.data);
           setHasUsedFreeGenerate(true);
           setCurrentStep(7);
         }

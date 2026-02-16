@@ -195,7 +195,7 @@ const Step3BirthDate = ({ formData, onInputChange }) => {
     if (formData.birthDate !== date) {
       onInputChange("birthDate", date);
     }
-  }, [mIndex, dIndex, yIndex, onInputChange, formData.birthDate]);
+  }, [mIndex, dIndex, yIndex]);
 
   return (
     <div className="animate-fadeIn">
@@ -244,7 +244,6 @@ const Step3BirthDate = ({ formData, onInputChange }) => {
         *::-webkit-scrollbar {
           display: none;
         }
-
         * {
           -ms-overflow-style: none;
           scrollbar-width: none;

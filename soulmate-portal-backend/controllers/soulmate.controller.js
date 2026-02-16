@@ -42,15 +42,16 @@ export const createOrGetSoulmate = async (req, res) => {
         needsPremium: true,
       });
     }
-
     const imageUrl = await generateSoulmateImage({
       gender,
+      birthDate,
       ethnicBackground,
       vibe,
-      sketchStyle: "realistic",
+      birthplace,
+      birthTime,
     });
     const compatibilityScore = calculateCompatibility(birthDate, birthTime);
-    const insights = generateInsights(compatibilityScore, vibe);
+const insights = await generateInsights(birthDate, gender, ethnicBackground, vibe, birthplace, birthTime);
     const soulmate = await Soulmate.create({
       userId,
       gender,

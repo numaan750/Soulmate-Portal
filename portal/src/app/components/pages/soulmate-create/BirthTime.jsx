@@ -183,7 +183,7 @@ const Step6BirthTime = ({ formData, onInputChange }) => {
     if (formData.birthTime !== time) {
       onInputChange("birthTime", time);
     }
-  }, [hIndex, mIndex, pIndex, onInputChange, formData.birthTime]);
+  }, [hIndex, mIndex, pIndex]);
 
   return (
     <div className="animate-fadeIn">

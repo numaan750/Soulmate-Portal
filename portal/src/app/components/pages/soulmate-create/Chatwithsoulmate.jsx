@@ -28,14 +28,17 @@ const Chatwithsoulmate = ({ soulmateData }) => {
   }, [messages]);
 
   const sendQuickMessage = async (text, index) => {
+    if (loading) return;
+
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setLoading(true);
 
     try {
-      const reply = await chatWithSoulmate(text, soulmateData);
+      const reply = await chatWithSoulmate(updatedMessages, soulmateData);
       setMessages((prev) => [
         ...prev,
         {
@@ -48,7 +51,8 @@ const Chatwithsoulmate = ({ soulmateData }) => {
         ...prev,
         {
           role: "assistant",
-          content: "Sorry, I couldn't respond right now. Please try again.",
+          content:
+            "I'm having trouble connecting right now. Please try again, my love.",
         },
       ]);
     } finally {
@@ -57,18 +61,18 @@ const Chatwithsoulmate = ({ soulmateData }) => {
   };
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMsg]);
-    const messageText = input;
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput("");
     setLoading(true);
 
     try {
-      const reply = await chatWithSoulmate(messageText, soulmateData);
+      const reply = await chatWithSoulmate(updatedMessages, soulmateData);
       setMessages((prev) => [
         ...prev,
         {
@@ -81,7 +85,8 @@ const Chatwithsoulmate = ({ soulmateData }) => {
         ...prev,
         {
           role: "assistant",
-          content: "Sorry, I couldn't respond right now. Please try again.",
+          content:
+            "I'm having trouble connecting right now. Please try again, my love.",
         },
       ]);
     } finally {
@@ -136,7 +141,7 @@ const Chatwithsoulmate = ({ soulmateData }) => {
 
       <div className="flex-shrink-0 p-2 sm:p-4">
         <div className="space-y-3 sm:space-y-4 mb-4">
-          <div className="flex flex-nowrap overflow-x-auto gap-2 sm:gap-3 ml-0 sm:ml-8 scrollbar-hide">
+          <div className="flex flex-nowrap overflow-x-auto gap-2 sm:gap-3 ml-0 sm:ml-2 scrollbar-hide">
             {quickPrompts.map((text, index) => (
               <button
                 key={index}

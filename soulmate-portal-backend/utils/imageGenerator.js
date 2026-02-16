@@ -3,49 +3,69 @@ import fetch from "node-fetch";
 
 export const generateSoulmateImage = async ({
   gender,
+  birthDate,
   ethnicBackground,
   vibe,
+  birthplace,
+  birthTime,
 }) => {
   try {
-    const genderText =
-      gender === "male"
-        ? "young man portrait"
-        : gender === "female"
-          ? "young woman portrait"
-          : "young person portrait";
-
     const ethnicText = ethnicBackground.replace(/-/g, " ");
 
-    const prompt = `ultra sharp high quality and white line art pancil Sketch, fine line pencil sketch, pure ink outline drawing, only clean thin contour lines, no shading, no grayscale, no color, no fill, white background, vector style, high contrast black lines, extremely crisp details,
-         ${genderText},
-         ${ethnicText} features,
-         ${vibe} expression
-        `;
+    const prompt = `A solo black and white pencil sketch on paper of my soulmate, My soulmate gender will be${gender},
+born on ${birthDate}, with an ${ethnicText} background with embodies a ${vibe} aura.
+The portrait should capture natural beauty, soft expression, and emotional depth, connected to my birth in ${birthplace} at ${birthTime}.
+Use fine pencil strokes, shading, and a hand-drawn style to create a timeless and elegant soulmate portrait.`;
 
-    const negativePrompt = `color, grayscale, shading, shadow, gradient, realistic photo, photography, 3d render, blur, soft focus, watercolor, oil painting, anime, cartoon, thick strokes, messy lines`;
-
-    const aiImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
-      prompt,
-    )}?width=768&height=768&nologo=true&negative=${encodeURIComponent(
-      negativePrompt,
-    )}&seed=${Math.floor(Math.random() * 1000000)}`;
-
-    const response = await fetch(aiImageUrl);
-
-    if (!response.ok) {
-      throw new Error(`Image fetch failed with status: ${response.status}`);
-    }
-
-    const buffer = await response.arrayBuffer();
-    const base64Image = Buffer.from(buffer).toString("base64");
-
-    const uploadResponse = await cloudinary.uploader.upload(
-      `data:image/png;base64,${base64Image}`,
+    const response = await fetch(
+      "https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation",
       {
-        folder: "soulmates",
-        transformation: [{ effect: "sharpen:100" }, { effect: "contrast:20" }],
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: process.env.DASHSCOPE_API_KEY,
+        },
+        body: JSON.stringify({
+          model: "wan2.6-t2i",
+          input: {
+            messages: [
+              {
+                role: "user",
+                content: [
+                  {
+                    text: prompt,
+                  },
+                ],
+              },
+            ],
+          },
+          parameters: {
+            negative_prompt: "",
+            prompt_extend: true,
+            watermark: false,
+            n: 1,
+            size: "1328*1328",
+          },
+        }),
       },
     );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      throw new Error("Dashscope image generation failed");
+    }
+
+    const imageUrl = data?.output?.choices?.[0]?.message?.content?.[0]?.image;
+
+    if (!imageUrl) {
+      throw new Error("No image returned from Dashscope");
+    }
+
+    const uploadResponse = await cloudinary.uploader.upload(imageUrl, {
+      folder: "soulmates",
+    });
 
     return uploadResponse.secure_url;
   } catch (error) {

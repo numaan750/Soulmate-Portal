@@ -29,37 +29,15 @@ const NameAnalysis = () => {
     }
   }, [messages]);
 
-  const sendQuickMessage = (text, index) => {
+  const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: `🔮 Name Insight: Your name carries unique vibrations. "${text}" suggests deep traits linked to your identity and destiny.`,
-        },
-      ]);
-      setLoading(false);
-    }, 1000);
-  };
-
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    setHiddenPrompts(quickPrompts.map((_, i) => i));
-
-    const userMsg = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setLoading(true);
-
     try {
-      const reply = await sendAiChat([...messages, userMsg]);
+      const reply = await sendAiChat([userMsg], "name_analysis");
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setMessages((prev) => [
@@ -74,6 +52,30 @@ const NameAnalysis = () => {
     }
   };
 
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+    setHiddenPrompts(quickPrompts.map((_, i) => i));
+
+    const userMsg = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const reply = await sendAiChat([...messages, userMsg], "name_analysis");
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "⚠️ Something went wrong. Please try again.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <div className="text-[#FFFFFF] max-w-4xl flex flex-row items-start sm:items-center">

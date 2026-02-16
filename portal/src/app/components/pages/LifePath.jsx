@@ -29,28 +29,31 @@ const LifePath = () => {
     }
   }, [messages]);
 
-  const sendQuickMessage = (text, index) => {
+  const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await sendAiChat([userMsg], "life_path");
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: `🛤️ Life Path Insight: "${text}" can reveal your strengths, challenges, and guidance for career and relationships.`,
+          content: "⚠️ Something went wrong. Please try again.",
         },
       ]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
@@ -59,7 +62,7 @@ const LifePath = () => {
     setLoading(true);
 
     try {
-      const reply = await sendAiChat([...messages, userMsg]);
+      const reply = await sendAiChat([...messages, userMsg], "life_path");
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setMessages((prev) => [

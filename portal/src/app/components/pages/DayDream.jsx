@@ -29,28 +29,31 @@ const DayDream = () => {
     }
   }, [messages]);
 
-  const sendQuickMessage = (text, index) => {
+  const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const reply = await sendAiChat([userMsg], "day_dream");
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: `🌤️ Daydream Insight: "${text}" reflects your inner wishes, future goals, and creative thoughts.`,
+          content: "⚠️ Something went wrong. Please try again.",
         },
       ]);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
@@ -59,7 +62,7 @@ const DayDream = () => {
     setLoading(true);
 
     try {
-      const reply = await sendAiChat([...messages, userMsg]);
+      const reply = await sendAiChat([...messages, userMsg], "day_dream");
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       setMessages((prev) => [
