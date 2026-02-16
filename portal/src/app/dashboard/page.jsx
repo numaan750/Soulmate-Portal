@@ -394,7 +394,7 @@ const SoulmateSidebar = () => {
                           alt="FIND-YOUR-SOULMATE"
                           width={1200}
                           height={300}
-                          className="w-full h-[160px] sm:h-[220px] md:h-[300px] object-cover md-object-contain rounded-3xl"
+                          className="w-full h-auto rounded-3xl"
                         />
                         <div className="absolute inset-x-0 bottom-2 sm:bottom-4 flex justify-center items-center px-4">
                           <button
