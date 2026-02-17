@@ -7,27 +7,31 @@ import { AppContext } from "@/context/Appcontext";
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   // BAAD MEIN:
-const { authenticated, authLoading } = useContext(AppContext);
+  const { authenticated, authLoading } = useContext(AppContext);
 
-useEffect(() => {
-  if (!authLoading && !authenticated) {
-    router.replace("/login");
+  useEffect(() => {
+    if (!authLoading && !authenticated) {
+      router.replace("/login");
+    }
+  }, [authenticated, authLoading, router]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0A090C]">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
   }
-}, [authenticated, authLoading, router]);
 
-if (authLoading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A090C]">
-      <div className="text-white text-xl">Loading...</div>
-    </div>
-  );
-}
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0A090C]">
+        <div className="text-white text-xl">Redirecting...</div>
+      </div>
+    );
+  }
 
-if (!authenticated) {
-  return null;
-}
-
-return <>{children}</>;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
