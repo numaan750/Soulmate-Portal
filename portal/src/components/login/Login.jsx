@@ -15,11 +15,11 @@ const Login = () => {
     signup,
     login,
     authenticated,
+    authLoading,
     error,
     setError,
     loading,
     loginWithGoogle,
-    loginWithApple,
   } = useContext(AppContext);
 
   const [isSignup, setIsSignup] = useState(false);
@@ -33,10 +33,18 @@ const Login = () => {
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false); // ADD THIS
 
   useEffect(() => {
-    if (authenticated) {
-      router.push("/dashboard");
+    if (!authLoading && authenticated) {
+      router.replace("/dashboard");
     }
-  }, [authenticated, router]);
+  }, [authenticated, authLoading, router]);
+
+  if (authLoading || authenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0A090C]">
+        <div className="w-12 h-12 border-4 border-[#AABFFF] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,7 +92,7 @@ const Login = () => {
         });
 
         if (result.status === "success") {
-          router.push("/dashboard");
+          router.push("/dashboard"); // login ke baad
         }
       } else {
         const result = await login({
@@ -93,7 +101,7 @@ const Login = () => {
         });
 
         if (result.status === "success") {
-          router.push("/dashboard");
+          router.replace("/dashboard"); // login
         }
       }
     } catch (err) {
@@ -118,7 +126,7 @@ const Login = () => {
       const result = await loginWithGoogle();
 
       if (result.status === "success") {
-        router.push("/dashboard");
+        router.replace("/dashboard");
       }
     } catch (err) {
       console.error("Google login error:", err);
@@ -134,7 +142,7 @@ const Login = () => {
       const result = await loginWithApple();
 
       if (result.status === "success") {
-        router.push("/dashboard");
+        router.replace("/dashboard");
       }
     } catch (err) {
       console.error("Apple login error:", err);

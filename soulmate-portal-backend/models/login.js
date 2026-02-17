@@ -25,7 +25,7 @@ const loginSchema = new mongoose.Schema(
     },
     provider: {
       type: String,
-      enum: ["local", "google", "apple"],
+      enum: ["local", "google"],
       default: "local",
     },
     profilePicture: {

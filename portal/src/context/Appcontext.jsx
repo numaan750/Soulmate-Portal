@@ -10,7 +10,8 @@ const AppProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [projectcache, setProjectcache] = useState({});
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [resetPasswordError, setResetPasswordError] = useState(null);
@@ -28,14 +29,14 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
-
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
       setAuthenticated(true);
     }
-    setLoading(false);
+    setAuthLoading(false);
   }, []);
+
   const signup = async (userData) => {
     try {
       setError(null);
@@ -674,6 +675,7 @@ const AppProvider = ({ children }) => {
         setAuthenticated,
         loading,
         setLoading,
+         authLoading,
         projectcache,
         setProjectcache,
         // Authentication functions
