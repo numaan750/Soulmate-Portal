@@ -44,7 +44,7 @@ Keep the tone ${vibe}.`,
 }
 
 Do not change the titles. Just fill in the subtitles based on the soulmate interpretation. 
-Follow the 30-40 word limit for each subtitle.`,
+Follow the 25–30 word limit for each subtitle.`,
       },
     ];
 
@@ -72,7 +72,6 @@ Follow the 30-40 word limit for each subtitle.`,
     };
   } catch (error) {
     console.error("Generate insights error:", error);
-    // Fallback to default insights
     return {
       strengths:
         "You and your soulmate share emotional support, with respect forming the foundation of your bond. Together, you can overcome challenges and grow stronger.",
