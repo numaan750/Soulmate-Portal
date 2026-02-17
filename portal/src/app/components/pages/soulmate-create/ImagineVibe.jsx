@@ -3,8 +3,6 @@
 import { useState } from "react";
 
 const ImagineVibes = ({ formData, onInputChange }) => {
-  // const [selectedVibe, setSelectedVibe] = useState(null);
-
   const vibeOptions = [
     { id: "calm", label: "Calm" },
     { id: "energetic", label: "Energetic" },

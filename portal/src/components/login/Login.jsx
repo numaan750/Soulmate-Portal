@@ -30,7 +30,7 @@ const Login = () => {
   });
   const [validationError, setValidationError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false); // ADD THIS
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && authenticated) {
@@ -92,7 +92,7 @@ const Login = () => {
         });
 
         if (result.status === "success") {
-          router.push("/dashboard"); // login ke baad
+          router.push("/dashboard");
         }
       } else {
         const result = await login({
@@ -101,7 +101,7 @@ const Login = () => {
         });
 
         if (result.status === "success") {
-          router.replace("/dashboard"); // login
+          router.replace("/dashboard");
         }
       }
     } catch (err) {

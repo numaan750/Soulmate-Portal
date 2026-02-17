@@ -4,8 +4,6 @@ import Image from "next/image";
 import { useState } from "react";
 
 const Step1Welcome = ({ formData, onInputChange }) => {
-  // const [selectedGender, setSelectedGender] = useState(null);
-
   return (
     <div className="animate-fadeIn">
       <h2 className="text-[20px] sm:text-[24px] md:text-[30px] font-bold text-center mb-2">

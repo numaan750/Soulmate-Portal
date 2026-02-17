@@ -19,19 +19,13 @@ passport.use(
 
         const email = profile.emails[0].value;
         const googleId = profile.id;
-
-        // ✅ STEP 1: Find user by email (regardless of how they signed up)
         let user = await loginSchema.findOne({ email });
 
         if (user) {
           console.log("✅ User found with this email");
-
-          // ✅ STEP 2: Link Google ID to existing account if not already linked
           if (!user.googleId) {
             console.log("🔗 Linking Google account to existing user");
             user.googleId = googleId;
-
-            // Update profile picture if user doesn't have one
             if (!user.profilePicture && profile.photos && profile.photos[0]) {
               user.profilePicture = profile.photos[0].value;
             }
@@ -44,8 +38,6 @@ passport.use(
 
           return done(null, user);
         }
-
-        // ✅ STEP 3: Create new user only if email doesn't exist
         console.log("➕ Creating new Google user");
         user = await loginSchema.create({
           googleId: googleId,
@@ -56,7 +48,6 @@ passport.use(
             profile.photos && profile.photos[0]
               ? profile.photos[0].value
               : null,
-          // Password is not required for Google users
         });
 
         console.log("✅ New Google user created:", user._id);

@@ -6,7 +6,6 @@ import { AppContext } from "@/context/Appcontext";
 
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
-  // BAAD MEIN:
   const { authenticated, authLoading } = useContext(AppContext);
 
   useEffect(() => {
@@ -18,7 +17,7 @@ const ProtectedRoute = ({ children }) => {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A090C]">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="text-white text-xl">Please Wait.......</div>
       </div>
     );
   }
@@ -26,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
   if (!authenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0A090C]">
-        <div className="text-white text-xl">Redirecting...</div>
+        <div className="text-white text-xl">Please Wait.......</div>
       </div>
     );
   }

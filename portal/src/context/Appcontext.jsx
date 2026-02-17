@@ -678,13 +678,11 @@ const AppProvider = ({ children }) => {
          authLoading,
         projectcache,
         setProjectcache,
-        // Authentication functions
         signup,
         login,
         logout,
         updateProfile,
         deleteprofile,
-        // password reset karny k liya
         resetPasswordLoading,
         setResetPasswordLoading,
         resetPasswordError,
@@ -692,16 +690,12 @@ const AppProvider = ({ children }) => {
         requestPasswordReset,
         verifyResetCode,
         resetPassword,
-        //AI Api k liya
         sendAiChat,
-        // Share functionality
         createShareableLink,
         getSharedContent,
         getUserSharedContent,
         deleteSharedContent,
-        // Google/Apple login
         loginWithGoogle,
-        //soulmate create k liya
         createSoulmate,
         getUserSoulmate,
         deleteSoulmate,

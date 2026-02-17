@@ -56,8 +56,6 @@ export const signupUser = async (req, res) => {
         message: "Email required.",
       });
     }
-
-    // ✅ CHANGE: Only check for existing user by email
     const existingUser = await loginSchema.findOne({ email });
 
     if (existingUser) {
@@ -88,8 +86,6 @@ export const signupUser = async (req, res) => {
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
-
-    // ✅ CHANGE: Create with provider as 'local'
     const user = await loginSchema.create({
       email,
       password: hashedPassword,

@@ -4,9 +4,6 @@ import Image from "next/image";
 import { useState } from "react";
 
 const EthicalBackground = ({ formData, onInputChange }) => {
-  // const [selectedEthnicBackground, setSelectedEthnicBackground] =
-  //   useState(null);
-
   const ethnicOptions = [
     { id: "white-caucasian", label: "White / Caucasian" },
     { id: "asian", label: "Asian" },
