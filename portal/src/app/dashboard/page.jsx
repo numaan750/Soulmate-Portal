@@ -16,6 +16,7 @@ import PremiumPopup from "../components/pages/PremiumPopup";
 import FindSoulmate from "../components/pages/FindSoulmate";
 import { Menu, X } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ConfirmLeavePopup from "../components/ConfirmLeavePopup";
 
 const SoulmateSidebar = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -23,6 +24,27 @@ const SoulmateSidebar = () => {
   const [isPremiumPopupOpen, setIsPremiumPopupOpen] = useState(false);
   const [soulmateStep, setSoulmateStep] = useState(1);
   const [open, setOpen] = useState(false);
+  const [showLeavePopup, setShowLeavePopup] = useState(false);
+  const [pendingSection, setPendingSection] = useState(null);
+
+  const chatSections = [
+    "any-dream",
+    "nightmare",
+    "day-dream",
+    "emotional",
+    "life-path",
+    "name-analysis",
+    "energy-numbers",
+  ];
+
+  const handleSectionChange = (section) => {
+    if (chatSections.includes(activeSection)) {
+      setPendingSection(section);
+      setShowLeavePopup(true);
+    } else {
+      setActiveSection(section);
+    }
+  };
 
   const soulmateStepTitles = {
     1: "Create Your Soulmate",
@@ -84,7 +106,7 @@ const SoulmateSidebar = () => {
             <nav className="flex-1 overflow-y-auto scrollbar-hide">
               <button
                 onClick={() => {
-                  setActiveSection("home");
+                  handleSectionChange("home");
                   setActiveSubTab(null);
                   setOpen(false);
                 }}
@@ -163,7 +185,7 @@ const SoulmateSidebar = () => {
               </button>
               <button
                 onClick={() => {
-                  setActiveSection("nightmare");
+                  handleSectionChange("nightmare");
                   setActiveSubTab("nightmare");
                   setOpen(false);
                 }}
@@ -271,7 +293,7 @@ const SoulmateSidebar = () => {
               </button>
               <button
                 onClick={() => {
-                  setActiveSection("name-analysis");
+                  handleSectionChange("name-analysis");
                   setActiveSubTab("name-analysis");
                   setOpen(false);
                 }}
@@ -432,7 +454,7 @@ const SoulmateSidebar = () => {
                           </h4>
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                             <div
-                              onClick={() => setActiveSection("any-dream")}
+                              onClick={() => handleSectionChange("any-dream")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
@@ -456,7 +478,7 @@ const SoulmateSidebar = () => {
                               </div>
                             </div>
                             <div
-                              onClick={() => setActiveSection("nightmare")}
+                              onClick={() => handleSectionChange("nightmare")}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
                               <Image
@@ -471,7 +493,7 @@ const SoulmateSidebar = () => {
                               </span>
                             </div>
                             <div
-                              onClick={() => setActiveSection("day-dream")}
+                              onClick={() => handleSectionChange("day-dream")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
@@ -495,7 +517,7 @@ const SoulmateSidebar = () => {
                               </div>
                             </div>
                             <div
-                              onClick={() => setActiveSection("emotional")}
+                              onClick={() => handleSectionChange("emotional")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
@@ -526,7 +548,7 @@ const SoulmateSidebar = () => {
                           </h4>
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                             <div
-                              onClick={() => setActiveSection("life-path")}
+                              onClick={() => handleSectionChange("life-path")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
@@ -550,7 +572,9 @@ const SoulmateSidebar = () => {
                               </div>
                             </div>
                             <div
-                              onClick={() => setActiveSection("name-analysis")}
+                              onClick={() =>
+                                handleSectionChange("name-analysis")
+                              }
                               // onClick={() => setIsPremiumPopupOpen(true)}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
@@ -566,7 +590,9 @@ const SoulmateSidebar = () => {
                               </span>
                             </div>
                             <div
-                              onClick={() => setActiveSection("energy-numbers")}
+                              onClick={() =>
+                                handleSectionChange("energy-numbers")
+                              }
                               // onClick={() => setIsPremiumPopupOpen(true)}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
@@ -619,6 +645,18 @@ const SoulmateSidebar = () => {
             onClose={() => setIsPremiumPopupOpen(false)}
           />
         </div>
+        <ConfirmLeavePopup
+          isOpen={showLeavePopup}
+          onCancel={() => {
+            setShowLeavePopup(false);
+            setPendingSection(null);
+          }}
+          onConfirm={() => {
+            setShowLeavePopup(false);
+            setActiveSection(pendingSection);
+            setPendingSection(null);
+          }}
+        />
       </>
     </ProtectedRoute>
   );
