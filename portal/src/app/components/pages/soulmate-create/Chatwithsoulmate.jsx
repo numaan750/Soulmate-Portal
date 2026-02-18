@@ -119,7 +119,7 @@ const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
     <div className="h-full flex flex-col">
       <div className="text-[#FFFFFF] flex flex-row items-start sm:items-center flex-shrink-0 p-2 sm:p-4">
         <Image
-          src="/images/Ai-Soulmate-Art.webp"
+          src={soulmateData?.imageUrl || "/images/Ai-Soulmate-Art.webp"}
           alt="Ai-Soulmate-Art.webp"
           width={31}
           height={31}
@@ -136,22 +136,39 @@ const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
         <div className="space-y-3 py-4">
           {" "}
           {messages.map((msg, i) => (
-            <div key={i} className="flex">
+            <div
+              key={i}
+              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start items-end gap-2"}`}
+            >
+              {/* Soulmate image sirf assistant messages ke saath */}
+              {msg.role === "assistant" && (
+                <Image
+                  src={soulmateData?.imageUrl || "/images/Ai-Soulmate-Art.webp"}
+                  alt="Soulmate"
+                  width={28}
+                  height={28}
+                  className="rounded-full w-7 h-7 object-cover flex-shrink-0 mb-1"
+                />
+              )}
+
               <div
                 className={`px-4 py-2 rounded-xl break-words text-[16px] max-w-full sm:max-w-[60%]
-               ${
-                 msg.role === "user"
-                   ? "bg-[#35384A] text-white ml-auto"
-                   : "text-gray-200 mr-auto"
-               }`}
+       ${msg.role === "user" ? "bg-[#35384A] text-white" : "text-gray-200"}`}
               >
                 {msg.content}
               </div>
             </div>
           ))}
           {loading && (
-            <div className="flex">
-              <div className="px-4 py-2 rounded-xl bg-gray-700 text-gray-200 mr-auto">
+            <div className="flex justify-start items-end gap-2">
+              <Image
+                src={soulmateData?.imageUrl || "/images/Ai-Soulmate-Art.webp"}
+                alt="Soulmate"
+                width={28}
+                height={28}
+                className="rounded-full w-7 h-7 object-cover flex-shrink-0 mb-1"
+              />
+              <div className="px-4 py-2 rounded-xl bg-gray-700 text-gray-200">
                 Soulmate is typing...
               </div>
             </div>
