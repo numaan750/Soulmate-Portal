@@ -20,7 +20,6 @@ import ConfirmLeavePopup from "../components/ConfirmLeavePopup";
 import { AppContext } from "@/context/Appcontext";
 import { Toaster } from "react-hot-toast";
 
-
 const SoulmateSidebar = () => {
   const { isPremium, premiumExpiryDate } = useContext(AppContext);
   const [activeSection, setActiveSection] = useState("home");
@@ -78,7 +77,7 @@ const SoulmateSidebar = () => {
   return (
     <ProtectedRoute>
       <>
-      <Toaster position="top-center" />
+        <Toaster position="top-center" />
         {!open && (
           <button
             onClick={() => setOpen(true)}
@@ -406,18 +405,20 @@ const SoulmateSidebar = () => {
                       {activeSection === "premium-plans" && "Premium Plans"}
                     </h3>
                     <div className="flex items-center gap-3  cursor-pointer">
-                      <button
-                        onClick={() => setIsPremiumPopupOpen(true)}
-                        className="hidden sm:inline-flex items-center gap-2 cursor-pointer px-3 py-2 bg-[#AABFFF] rounded-full text-sm font-semibold text-black shadow-lg"
-                      >
-                        <Image
-                          src="/svgs/get-pro.svg"
-                          alt="Get Pro icon"
-                          width={16}
-                          height={16}
-                        />
-                        <span>Get Pro</span>
-                      </button>
+                      {!isPremium && (
+                        <button
+                          onClick={() => setIsPremiumPopupOpen(true)}
+                          className="hidden sm:inline-flex items-center gap-2 cursor-pointer px-3 py-2 bg-[#AABFFF] rounded-full text-sm font-semibold text-black shadow-lg"
+                        >
+                          <Image
+                            src="/svgs/get-pro.svg"
+                            alt="Get Pro icon"
+                            width={16}
+                            height={16}
+                          />
+                          <span>Get Pro</span>
+                        </button>
+                      )}
 
                       <ProfileDropdown />
                     </div>
