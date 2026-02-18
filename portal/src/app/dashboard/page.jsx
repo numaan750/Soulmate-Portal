@@ -92,15 +92,15 @@ const SoulmateSidebar = () => {
         )}
         {open && (
           <div
-            className="fixed inset-0 bg-black z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
             onClick={() => setOpen(false)}
           />
         )}
         <div className="flex h-screen bg-black font-sans overflow-hidden">
           <aside
-            className={`fixed top-0 left-0 z-50 h-screen w-64 text-white p-6 flex flex-col overflow-hidden transform transition-transform duration-300
+            className={`fixed top-0 left-0 z-50 h-screen w-[80%] bg-black text-white p-6 flex flex-col overflow-hidden transform transition-transform duration-300
            ${open ? "translate-x-0" : "-translate-x-full"}
-           lg:translate-x-0 lg:static
+           lg:translate-x-0 lg:static lg:w-64 lg:bg-transparent
           `}
           >
             {" "}

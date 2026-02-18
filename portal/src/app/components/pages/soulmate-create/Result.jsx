@@ -48,32 +48,32 @@ const Step7VisualStyle = ({
     return dateStr;
   };
 
-const styles = [
-  {
-    title: "A glimpse into your connection",
-    description:
-      soulmateData?.glimpse ||
-      "Your perfect soulmate is Pisces because they balance your practicality with deep emotions. Together, you create harmony and a bond filled with compassion.",
-  },
-  {
-    title: "Compatibility",
-    description:
-      soulmateData?.compatibility ||
-      "You and your soulmate share a natural emotional understanding. Your differences complement each other, creating balance and long-term growth",
-  },
-  {
-    title: "Strengths",
-    description:
-      soulmateData?.strengths ||
-      "You and your soulmate share emotional support, with respect forming the foundation of your bond. Together, you can overcome challenges and grow stronger.",
-  },
-  {
-    title: "Weaknesses",
-    description:
-      soulmateData?.weaknesses ||
-      "At times, mood swings or misunderstandings may create distance. To sustain balance, both must maintain individuality.",
-  },
-];
+  const styles = [
+    {
+      title: "A glimpse into your connection",
+      description:
+        soulmateData?.glimpse ||
+        "Your perfect soulmate is Pisces because they balance your practicality with deep emotions. Together, you create harmony and a bond filled with compassion.",
+    },
+    {
+      title: "Compatibility",
+      description:
+        soulmateData?.compatibility ||
+        "You and your soulmate share a natural emotional understanding. Your differences complement each other, creating balance and long-term growth",
+    },
+    {
+      title: "Strengths",
+      description:
+        soulmateData?.strengths ||
+        "You and your soulmate share emotional support, with respect forming the foundation of your bond. Together, you can overcome challenges and grow stronger.",
+    },
+    {
+      title: "Weaknesses",
+      description:
+        soulmateData?.weaknesses ||
+        "At times, mood swings or misunderstandings may create distance. To sustain balance, both must maintain individuality.",
+    },
+  ];
 
   const handleShare = async () => {
     try {
@@ -152,7 +152,7 @@ const styles = [
         </div>
 
         <div className="flex flex-col space-y-4 sm:space-y-6 md:space-y-10 lg:space-y-12 items-center justify-center w-full lg:w-1/2">
-          <div className="flex flex-row flex-nowrap justify-center items-center gap-2 sm:gap-4 lg:gap-6 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[14px] xl:text-[24px] text-center overflow-x-auto max-w-full px-2">
+          <div className="flex flex-row flex-wrap justify-center items-center gap-2 sm:gap-4 lg:gap-6 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[14px] xl:text-[20px] text-center max-w-full px-2">
             <span className="border-r border-white pr-2 sm:pr-4 lg:pr-6 whitespace-nowrap">
               {formatBirthDate(soulmateData?.birthDate)}
             </span>
@@ -184,7 +184,7 @@ const styles = [
             </span>
           </div>
 
-          <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 w-full px-5">
+          <div className="flex flex-row flex-nowrap items-center justify-center gap-2 lg:gap-3 w-full px-2">
             <button
               onClick={handleShare}
               disabled={isSharing}
@@ -225,7 +225,7 @@ const styles = [
 
             <button
               onClick={goToChat}
-              className="bg-[#AABFFF] cursor-pointer flex items-center justify-center gap-2 sm:gap-3 text-black px-3 sm:px-10 lg:px-14 py-3 sm:py-3 rounded-full text-[14px] sm:text-[15px] lg:text-[16px] xl:text-[18px] font-semibold transition-colors duration-200 whitespace-nowrap hover:bg-[#99AEFF] flex-shrink-0"
+              className="bg-[#AABFFF] cursor-pointer flex items-center justify-center gap-2 sm:gap-3 text-black px-3 sm:px-6 lg:px-8 py-3 sm:py-3 rounded-full text-[14px] sm:text-[15px] lg:text-[16px] xl:text-[18px] font-semibold transition-colors duration-200 whitespace-nowrap hover:bg-[#99AEFF]"
             >
               Chat With Soulmate
               <Image
