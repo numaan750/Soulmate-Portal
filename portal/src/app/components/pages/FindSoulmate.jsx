@@ -13,7 +13,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { AppContext } from "@/context/Appcontext";
 import SoulmateLoadingScreen from "../SoulmateLoadingScreen";
 
-const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
+const FindSoulmate = ({ setSoulmateStep, openPremiumPopup, onMessageSent }) => {
   const {
     createSoulmate,
     getUserSoulmate,
@@ -161,15 +161,20 @@ const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
           />
         );
       case 8:
-        return <Chatwithsoulmate soulmateData={generatedSoulmate} />;
+        return (
+          <Chatwithsoulmate
+            soulmateData={generatedSoulmate}
+            onMessageSent={onMessageSent}
+          />
+        );
       default:
         return <Step1Welcome />;
     }
   };
 
   if (isGenerating) {
-  return <SoulmateLoadingScreen />;
-}
+    return <SoulmateLoadingScreen />;
+  }
 
   return (
     <div

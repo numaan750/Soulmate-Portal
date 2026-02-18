@@ -3,7 +3,7 @@ import { AppContext } from "@/context/Appcontext";
 import Image from "next/image";
 import { useState, useRef, useEffect, useContext } from "react";
 
-const Chatwithsoulmate = ({ soulmateData }) => {
+const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
   const { chatWithSoulmate } = useContext(AppContext);
 
   const [input, setInput] = useState("");
@@ -31,7 +31,7 @@ const Chatwithsoulmate = ({ soulmateData }) => {
     if (loading) return;
 
     setHiddenPrompts((prev) => [...prev, index]);
-
+    onMessageSent?.();
     const userMsg = { role: "user", content: text };
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
@@ -69,6 +69,7 @@ const Chatwithsoulmate = ({ soulmateData }) => {
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
     setInput("");
+    onMessageSent?.();
     setLoading(true);
 
     try {

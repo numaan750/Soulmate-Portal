@@ -39,6 +39,7 @@ const SoulmateSidebar = () => {
     "life-path",
     "name-analysis",
     "energy-numbers",
+    "find-soulmate",
   ];
 
   const handleSectionChange = (section) => {
@@ -148,7 +149,7 @@ const SoulmateSidebar = () => {
               </button>
               <button
                 onClick={() => {
-                  setActiveSection("find-soulmate");
+                  handleSectionChange("find-soulmate");
                   setActiveSubTab(null);
                 }}
                 className={`w-full text-left cursor-pointer px-4 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
@@ -681,6 +682,7 @@ const SoulmateSidebar = () => {
                       <FindSoulmate
                         setSoulmateStep={setSoulmateStep}
                         openPremiumPopup={() => setIsPremiumPopupOpen(true)}
+                        onMessageSent={() => setHasMessages(true)}
                       />
                     )}
                   </div>

@@ -27,7 +27,6 @@ app.use("/api", sharerouter);
 app.use("/api", soulmateRoutes);
 app.use("/api", premiumRoutes);
 
-
 // const PORT = process.env.PORT || 4000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
