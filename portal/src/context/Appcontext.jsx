@@ -354,32 +354,48 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const sendAiChat = async (messages, type = "any_dream") => {
-    try {
-      setLoading(true);
+  const sendAiChat = async (messages, type = "any_dream", onChunk) => {
+    const response = await fetch(`${API_URL}/api/ai/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ messages, type }),
+    });
 
-      const response = await fetch(`${API_URL}/api/ai/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ messages, type }),
-      });
-
+    if (!response.ok) {
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "AI chat failed");
-      }
-
-      return data.reply;
-    } catch (error) {
-      console.error("AI Chat Error:", error);
-      throw error;
-    } finally {
-      setLoading(false);
+      throw new Error(data.message || "AI chat failed");
     }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value);
+      const lines = chunk.split("\n");
+
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          const data = line.slice(6);
+          if (data === "[DONE]") break;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.token) {
+              fullText += parsed.token;
+              onChunk?.(parsed.token, fullText);
+            }
+          } catch {}
+        }
+      }
+    }
+
+    return fullText;
   };
 
   const createShareableLink = async (shareData) => {
@@ -708,35 +724,52 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const chatWithSoulmate = async (messages, soulmateData) => {
-    try {
-      setLoading(true);
+  const chatWithSoulmate = async (messages, soulmateData, onChunk) => {
+    const response = await fetch(`${API_URL}/api/soulmate/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        messages,
+        soulmateData,
+      }),
+    });
 
-      const response = await fetch(`${API_URL}/api/soulmate/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          messages,
-          soulmateData,
-        }),
-      });
-
+    if (!response.ok) {
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Chat failed");
-      }
-
-      return data.reply;
-    } catch (error) {
-      console.error("Soulmate Chat Error:", error);
-      throw error;
-    } finally {
-      setLoading(false);
+      throw new Error(data.message || "Chat failed");
     }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value);
+      const lines = chunk.split("\n");
+
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          const data = line.slice(6);
+          if (data === "[DONE]") break;
+
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.token) {
+              fullText += parsed.token;
+              onChunk?.(parsed.token, fullText);
+            }
+          } catch {}
+        }
+      }
+    }
+
+    return fullText;
   };
 
   return (

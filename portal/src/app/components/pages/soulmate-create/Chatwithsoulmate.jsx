@@ -38,14 +38,24 @@ const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
     setLoading(true);
 
     try {
-      const reply = await chatWithSoulmate(updatedMessages, soulmateData);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: reply,
+      let assistantMessage = { role: "assistant", content: "" };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+
+      await chatWithSoulmate(
+        updatedMessages,
+        soulmateData,
+        (token, fullText) => {
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = {
+              role: "assistant",
+              content: fullText,
+            };
+            return updated;
+          });
         },
-      ]);
+      );
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -73,14 +83,24 @@ const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
     setLoading(true);
 
     try {
-      const reply = await chatWithSoulmate(updatedMessages, soulmateData);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: reply,
+      let assistantMessage = { role: "assistant", content: "" };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+
+      await chatWithSoulmate(
+        updatedMessages,
+        soulmateData,
+        (token, fullText) => {
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = {
+              role: "assistant",
+              content: fullText,
+            };
+            return updated;
+          });
         },
-      ]);
+      );
     } catch (error) {
       setMessages((prev) => [
         ...prev,

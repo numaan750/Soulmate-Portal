@@ -52,7 +52,11 @@ export const dreamChat = async (req, res) => {
         content: msg.content,
       })),
     ];
-    const completion = await openai.chat.completions.create({
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const stream = await openai.chat.completions.create({
       model: OPENAI_CONFIG.model,
       messages: openaiMessages,
       temperature: OPENAI_CONFIG.temperature,
@@ -60,23 +64,18 @@ export const dreamChat = async (req, res) => {
       top_p: OPENAI_CONFIG.top_p,
       frequency_penalty: OPENAI_CONFIG.frequency_penalty,
       presence_penalty: OPENAI_CONFIG.presence_penalty,
+      stream: true,
     });
-    const aiReply = completion.choices[0]?.message?.content;
 
-    if (!aiReply) {
-      throw new Error("No response from OpenAI");
+    for await (const chunk of stream) {
+      const token = chunk.choices[0]?.delta?.content || "";
+      if (token) {
+        res.write(`data: ${JSON.stringify({ token })}\n\n`);
+      }
     }
-    console.log(`✅ [${type.toUpperCase()}] Response generated`);
-    console.log(`📊 Tokens: ${completion.usage?.total_tokens || 0}`);
-    return res.status(200).json({
-      status: "success",
-      reply: aiReply,
-      metadata: {
-        type: type,
-        model: completion.model,
-        tokensUsed: completion.usage?.total_tokens || 0,
-      },
-    });
+
+    res.write(`data: [DONE]\n\n`);
+    res.end();
   } catch (error) {
     console.error("❌ OpenAI Error:", error);
 

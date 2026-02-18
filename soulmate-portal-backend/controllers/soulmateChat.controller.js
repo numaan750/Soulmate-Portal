@@ -1,4 +1,8 @@
-import { openai, createSoulmateSystemPrompt, OPENAI_CONFIG } from '../config/ai.config.js';
+import {
+  openai,
+  createSoulmateSystemPrompt,
+  OPENAI_CONFIG,
+} from "../config/ai.config.js";
 
 export const chatWithSoulmate = async (req, res) => {
   try {
@@ -18,15 +22,21 @@ export const chatWithSoulmate = async (req, res) => {
     }
     const systemPrompt = createSoulmateSystemPrompt(soulmateData);
 
-    console.log(`💕 [SOULMATE CHAT] ${soulmateData.gender} soulmate with ${soulmateData.vibe} vibe`);
+    console.log(
+      `💕 [SOULMATE CHAT] ${soulmateData.gender} soulmate with ${soulmateData.vibe} vibe`,
+    );
     const openaiMessages = [
       systemPrompt,
-      ...messages.map(msg => ({
+      ...messages.map((msg) => ({
         role: msg.role,
-        content: msg.content
-      }))
+        content: msg.content,
+      })),
     ];
-    const completion = await openai.chat.completions.create({
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const stream = await openai.chat.completions.create({
       model: OPENAI_CONFIG.model,
       messages: openaiMessages,
       temperature: 0.8,
@@ -34,24 +44,18 @@ export const chatWithSoulmate = async (req, res) => {
       top_p: 0.95,
       frequency_penalty: 0.2,
       presence_penalty: 0.2,
+      stream: true,
     });
-    const aiReply = completion.choices[0]?.message?.content;
 
-    if (!aiReply) {
-      throw new Error("No response from soulmate");
+    for await (const chunk of stream) {
+      const token = chunk.choices[0]?.delta?.content || "";
+      if (token) {
+        res.write(`data: ${JSON.stringify({ token })}\n\n`);
+      }
     }
 
-    console.log(`✅ [SOULMATE CHAT] Response generated`);
-    return res.status(200).json({
-      status: "success",
-      reply: aiReply,
-      metadata: {
-        type: "soulmate_chat",
-        vibe: soulmateData.vibe,
-        tokensUsed: completion.usage?.total_tokens || 0,
-      }
-    });
-
+    res.write(`data: [DONE]\n\n`);
+    res.end();
   } catch (error) {
     console.error("❌ Soulmate Chat Error:", error);
 

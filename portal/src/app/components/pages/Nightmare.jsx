@@ -30,23 +30,36 @@ const Nightmare = ({ onMessageSent }) => {
 
   const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
-    onMessageSent?.(); 
+    onMessageSent?.();
     const userMsg = { role: "user", content: text };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [
+      ...prev,
+      userMsg,
+      { role: "assistant", content: "" },
+    ]);
     setLoading(true);
 
     try {
-      const reply = await sendAiChat([userMsg], "nightmare");
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      await sendAiChat([userMsg], "nightmare", (token, fullText) => {
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            role: "assistant",
+            content: fullText,
+          };
+          return updated;
+        });
+      });
     } catch (err) {
       console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        {
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
           role: "assistant",
           content: "⚠️ Something went wrong. Please try again.",
-        },
-      ]);
+        };
+        return updated;
+      });
     } finally {
       setLoading(false);
     }
@@ -57,23 +70,37 @@ const Nightmare = ({ onMessageSent }) => {
     setHiddenPrompts(quickPrompts.map((_, i) => i));
 
     const userMsg = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages((prev) => [
+      ...prev,
+      userMsg,
+      { role: "assistant", content: "" },
+    ]);
     setInput("");
     onMessageSent?.();
     setLoading(true);
 
     try {
-      const reply = await sendAiChat([...messages, userMsg], "nightmare");
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      await sendAiChat(updatedMessages, "nightmare", (token, fullText) => {
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            role: "assistant",
+            content: fullText,
+          };
+          return updated;
+        });
+      });
     } catch (err) {
       console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        {
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
           role: "assistant",
           content: "⚠️ Something went wrong. Please try again.",
-        },
-      ]);
+        };
+        return updated;
+      });
     } finally {
       setLoading(false);
     }
