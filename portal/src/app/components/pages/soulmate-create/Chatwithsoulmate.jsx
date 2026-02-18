@@ -140,7 +140,6 @@ const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
               key={i}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start items-end gap-2"}`}
             >
-              {/* Soulmate image sirf assistant messages ke saath */}
               {msg.role === "assistant" && (
                 <Image
                   src={soulmateData?.imageUrl || "/images/Ai-Soulmate-Art.webp"}
@@ -153,7 +152,7 @@ const Chatwithsoulmate = ({ soulmateData, onMessageSent }) => {
 
               <div
                 className={`px-4 py-2 rounded-xl break-words text-[16px] max-w-full sm:max-w-[60%]
-       ${msg.role === "user" ? "bg-[#35384A] text-white" : "text-gray-200"}`}
+               ${msg.role === "user" ? "bg-[#35384A] text-white" : "text-gray-200"}`}
               >
                 {msg.content}
               </div>
