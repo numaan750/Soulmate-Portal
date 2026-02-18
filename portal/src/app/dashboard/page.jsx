@@ -28,6 +28,7 @@ const SoulmateSidebar = () => {
   const [open, setOpen] = useState(false);
   const [showLeavePopup, setShowLeavePopup] = useState(false);
   const [pendingSection, setPendingSection] = useState(null);
+  const [hasMessages, setHasMessages] = useState(false);
 
   const chatSections = [
     "any-dream",
@@ -40,11 +41,12 @@ const SoulmateSidebar = () => {
   ];
 
   const handleSectionChange = (section) => {
-    if (chatSections.includes(activeSection)) {
+    if (chatSections.includes(activeSection) && hasMessages) {
       setPendingSection(section);
       setShowLeavePopup(true);
     } else {
       setActiveSection(section);
+      setHasMessages(false);
     }
   };
 
@@ -645,13 +647,31 @@ const SoulmateSidebar = () => {
                         </div>
                       </div>
                     )}
-                    {activeSection === "any-dream" && <AnyDream />}
-                    {activeSection === "nightmare" && <Nightmare />}
-                    {activeSection === "day-dream" && <DayDream />}
-                    {activeSection === "emotional" && <Emotional />}
-                    {activeSection === "life-path" && <LifePath />}
-                    {activeSection === "name-analysis" && <NameAnalysis />}
-                    {activeSection === "energy-numbers" && <EnergyNumbers />}
+                    {activeSection === "any-dream" && (
+                      <AnyDream onMessageSent={() => setHasMessages(true)} />
+                    )}
+                    {activeSection === "nightmare" && (
+                      <Nightmare onMessageSent={() => setHasMessages(true)} />
+                    )}
+                    {activeSection === "day-dream" && (
+                      <DayDream onMessageSent={() => setHasMessages(true)} />
+                    )}
+                    {activeSection === "emotional" && (
+                      <Emotional onMessageSent={() => setHasMessages(true)} />
+                    )}
+                    {activeSection === "life-path" && (
+                      <LifePath onMessageSent={() => setHasMessages(true)} />
+                    )}
+                    {activeSection === "name-analysis" && (
+                      <NameAnalysis
+                        onMessageSent={() => setHasMessages(true)}
+                      />
+                    )}
+                    {activeSection === "energy-numbers" && (
+                      <EnergyNumbers
+                        onMessageSent={() => setHasMessages(true)}
+                      />
+                    )}
                     {activeSection === "my-gallery" && <MyGallery />}
                     {activeSection === "find-soulmate" && (
                       <FindSoulmate
@@ -681,6 +701,7 @@ const SoulmateSidebar = () => {
             setShowLeavePopup(false);
             setActiveSection(pendingSection);
             setPendingSection(null);
+            setHasMessages(false);
           }}
         />
       </>

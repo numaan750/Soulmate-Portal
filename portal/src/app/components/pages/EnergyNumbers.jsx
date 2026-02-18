@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AppContext } from "@/context/Appcontext";
 import { useContext, useState, useRef, useEffect } from "react";
 
-const EnergyNumbers = () => {
+const EnergyNumbers = ({ onMessageSent }) => {
   const { token, sendAiChat } = useContext(AppContext);
 
   const [input, setInput] = useState("");
@@ -31,7 +31,7 @@ const EnergyNumbers = () => {
 
   const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
-
+    onMessageSent?.();
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
@@ -59,6 +59,7 @@ const EnergyNumbers = () => {
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    onMessageSent?.();
     setLoading(true);
 
     try {

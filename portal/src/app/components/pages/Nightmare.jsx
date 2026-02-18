@@ -3,7 +3,7 @@ import { AppContext } from "@/context/Appcontext";
 import Image from "next/image";
 import { useContext, useState, useRef, useEffect } from "react";
 
-const Nightmare = () => {
+const Nightmare = ({ onMessageSent }) => {
   const { token, sendAiChat } = useContext(AppContext);
 
   const [input, setInput] = useState("");
@@ -30,7 +30,7 @@ const Nightmare = () => {
 
   const sendQuickMessage = async (text, index) => {
     setHiddenPrompts((prev) => [...prev, index]);
-
+    onMessageSent?.(); 
     const userMsg = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
@@ -59,6 +59,7 @@ const Nightmare = () => {
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    onMessageSent?.();
     setLoading(true);
 
     try {

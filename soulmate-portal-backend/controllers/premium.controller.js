@@ -5,10 +5,10 @@ export const activateFakePremium = async (req, res) => {
     const userId = req.user._id;
     const { plan } = req.body;
 
-    // const expiryTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const expiryTime = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
     // const expiryTime = new Date(Date.now() + 5 * 60 * 1000);  //5 minutes
     // const expiryTime = new Date(Date.now() + 1 * 60 * 1000);  //1 minute
-    const expiryTime = new Date(Date.now() + 2 * 60 * 1000); //2 minutes
+    // const expiryTime = new Date(Date.now() + 2 * 60 * 1000); //2 minutes
 
     await loginSchema.findByIdAndUpdate(userId, {
       isPremium: true,
