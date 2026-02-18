@@ -11,6 +11,7 @@ import Result from "./soulmate-create/Result";
 import Chatwithsoulmate from "./soulmate-create/Chatwithsoulmate";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { AppContext } from "@/context/Appcontext";
+import SoulmateLoadingScreen from "../SoulmateLoadingScreen";
 
 const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
   const {
@@ -165,6 +166,10 @@ const FindSoulmate = ({ setSoulmateStep, openPremiumPopup }) => {
         return <Step1Welcome />;
     }
   };
+
+  if (isGenerating) {
+  return <SoulmateLoadingScreen />;
+}
 
   return (
     <div

@@ -4,6 +4,7 @@ import { AppContext } from "@/context/Appcontext";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 const PremiumPopup = ({ isOpen, onClose }) => {
   const [plan, setPlan] = useState("yearly");
@@ -217,12 +218,12 @@ const PremiumPopup = ({ isOpen, onClose }) => {
                     await activatePremium(plan);
                     setActivating(false);
                     onClose();
-                    alert(
-                      `✅ Premium activated for 10 minutes! Enjoy all features.`,
-                    );
+                    toast.success("Premium activated! Enjoy all features.");
                   } catch (err) {
                     setActivating(false);
-                    alert("Failed to activate premium. Please try again.");
+                    toast.error(
+                      "Failed to activate premium. Please try again.",
+                    );
                   }
                 }}
                 disabled={activating}

@@ -18,6 +18,8 @@ import { Menu, X } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ConfirmLeavePopup from "../components/ConfirmLeavePopup";
 import { AppContext } from "@/context/Appcontext";
+import { Toaster } from "react-hot-toast";
+
 
 const SoulmateSidebar = () => {
   const { isPremium, premiumExpiryDate } = useContext(AppContext);
@@ -76,6 +78,7 @@ const SoulmateSidebar = () => {
   return (
     <ProtectedRoute>
       <>
+      <Toaster position="top-center" />
         {!open && (
           <button
             onClick={() => setOpen(true)}
