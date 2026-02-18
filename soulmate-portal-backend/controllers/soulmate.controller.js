@@ -34,6 +34,17 @@ export const createOrGetSoulmate = async (req, res) => {
       });
     }
     const user = await User.findById(userId);
+    if (
+      user.isPremium &&
+      user.premiumExpiryDate &&
+      new Date() > user.premiumExpiryDate
+    ) {
+      await User.findByIdAndUpdate(userId, {
+        isPremium: false,
+        premiumExpiryDate: null,
+      });
+      user.isPremium = false;
+    }
 
     if (!user.isPremium && user.soulmateCredits <= 0) {
       return res.status(403).json({
@@ -51,7 +62,14 @@ export const createOrGetSoulmate = async (req, res) => {
       birthTime,
     });
     const compatibilityScore = calculateCompatibility(birthDate, birthTime);
-const insights = await generateInsights(birthDate, gender, ethnicBackground, vibe, birthplace, birthTime);
+    const insights = await generateInsights(
+      birthDate,
+      gender,
+      ethnicBackground,
+      vibe,
+      birthplace,
+      birthTime,
+    );
     const soulmate = await Soulmate.create({
       userId,
       gender,

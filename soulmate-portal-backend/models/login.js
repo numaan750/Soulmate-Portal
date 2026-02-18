@@ -50,7 +50,7 @@ const loginSchema = new mongoose.Schema(
     },
     soulmateCredits: {
       type: Number,
-      default: 1,
+      default: 0,
     },
   },
   {

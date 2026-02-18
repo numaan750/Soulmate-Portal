@@ -2,6 +2,31 @@ import { openai, getSystemPrompt, OPENAI_CONFIG } from "../config/ai.config.js";
 export const dreamChat = async (req, res) => {
   try {
     const { messages, type = "any_dream" } = req.body;
+
+    const freeTypes = ["nightmare", "name_analysis"];
+    if (!freeTypes.includes(type)) {
+      const user = req.user;
+      if (
+        user.isPremium &&
+        user.premiumExpiryDate &&
+        new Date() > user.premiumExpiryDate
+      ) {
+        const loginSchema = (await import("../models/login.js")).default;
+        await loginSchema.findByIdAndUpdate(user._id, {
+          isPremium: false,
+          premiumExpiryDate: null,
+        });
+        user.isPremium = false;
+      }
+      if (!user.isPremium) {
+        return res.status(403).json({
+          status: "error",
+          message: "Premium required",
+          needsPremium: true,
+        });
+      }
+    }
+
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({
         status: "error",

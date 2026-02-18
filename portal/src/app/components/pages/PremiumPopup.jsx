@@ -1,11 +1,14 @@
 "use client";
 
+import { AppContext } from "@/context/Appcontext";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 const PremiumPopup = ({ isOpen, onClose }) => {
   const [plan, setPlan] = useState("yearly");
+  const { activatePremium } = useContext(AppContext);
+  const [activating, setActivating] = useState(false);
 
   if (!isOpen) return null;
 
@@ -208,10 +211,24 @@ const PremiumPopup = ({ isOpen, onClose }) => {
               </p>
 
               <button
-                onClick={onClose}
-                className="w-full mb-4 bg-[#AABFFF] cursor-pointer text-black px-4 py-3 sm:py-4 rounded-full font-semibold hover:bg-[#98ADEE] transition text-sm sm:text-base"
+                onClick={async () => {
+                  try {
+                    setActivating(true);
+                    await activatePremium(plan);
+                    setActivating(false);
+                    onClose();
+                    alert(
+                      `✅ Premium activated for 10 minutes! Enjoy all features.`,
+                    );
+                  } catch (err) {
+                    setActivating(false);
+                    alert("Failed to activate premium. Please try again.");
+                  }
+                }}
+                disabled={activating}
+                className="w-full mb-4 bg-[#AABFFF] cursor-pointer text-black px-4 py-3 sm:py-4 rounded-full font-semibold hover:bg-[#98ADEE] transition text-sm sm:text-base disabled:opacity-70"
               >
-                Continue
+                {activating ? "Activating..." : "Continue"}
               </button>
 
               <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-[10px] sm:text-[14px] text-[#F3F3F3CC]">

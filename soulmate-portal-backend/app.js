@@ -10,6 +10,7 @@ import aiRoutes from "./router/ai.routes.js";
 import sharerouter from "./router/sharerouter.js";
 import authRoutes from "./router/auth.routes.js";
 import soulmateRoutes from "./router/soulmate.routes.js";
+import premiumRoutes from "./router/premium.routes.js";
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api", aiRoutes);
 app.use("/api", sharerouter);
 app.use("/api", soulmateRoutes);
+app.use("/api", premiumRoutes);
+
 
 // const PORT = process.env.PORT || 4000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

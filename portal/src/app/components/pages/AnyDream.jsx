@@ -112,7 +112,7 @@ const AnyDream = () => {
         {loading && (
           <div className="flex">
             <div className="px-4 py-2 rounded-xl text-[16px] bg-gray-700 text-gray-200 mr-auto max-w-full sm:max-w-[60%]">
-              AI is typing...
+              Soulmate is thinking...
             </div>
           </div>
         )}

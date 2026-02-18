@@ -16,6 +16,8 @@ const AppProvider = ({ children }) => {
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [resetPasswordError, setResetPasswordError] = useState(null);
   const authSuccessRef = useRef(false);
+  const [isPremium, setIsPremium] = useState(false);
+  const [premiumExpiryDate, setPremiumExpiryDate] = useState(null);
 
   const [soulmateCache, setSoulmateCache] = useState(() => {
     if (typeof window !== "undefined") {
@@ -29,11 +31,25 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
+    const storedPremium = localStorage.getItem("isPremium");
+    const storedExpiry = localStorage.getItem("premiumExpiryDate");
+
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
       setAuthenticated(true);
     }
+
+    if (storedPremium === "true" && storedExpiry) {
+      if (new Date() < new Date(storedExpiry)) {
+        setIsPremium(true);
+        setPremiumExpiryDate(new Date(storedExpiry));
+      } else {
+        localStorage.removeItem("isPremium");
+        localStorage.removeItem("premiumExpiryDate");
+      }
+    }
+
     setAuthLoading(false);
   }, []);
 
@@ -109,15 +125,76 @@ const AppProvider = ({ children }) => {
   };
   const logout = () => {
     localStorage.clear();
-
     setToken(null);
     setUser(null);
     setAuthenticated(false);
     setProjectcache({});
     setSoulmateCache(null);
-    localStorage.removeItem("soulmateCache");
+    setIsPremium(false);
+    setPremiumExpiryDate(null);
     router.replace("/login");
   };
+  const activatePremium = async (plan) => {
+    try {
+      const response = await fetch(`${API_URL}/api/premium/activate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ plan }),
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setIsPremium(true);
+        setPremiumExpiryDate(new Date(data.premiumExpiryDate));
+        localStorage.setItem("isPremium", "true");
+        localStorage.setItem("premiumExpiryDate", data.premiumExpiryDate);
+        if (user) {
+          const updatedUser = {
+            ...user,
+            isPremium: true,
+            premiumExpiryDate: data.premiumExpiryDate,
+          };
+          setUser(updatedUser);
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Premium activation error:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    if (!isPremium || !premiumExpiryDate) return;
+
+    const interval = setInterval(() => {
+      if (new Date() > new Date(premiumExpiryDate)) {
+        setIsPremium(false);
+        setPremiumExpiryDate(null);
+        localStorage.removeItem("isPremium");
+        localStorage.removeItem("premiumExpiryDate");
+        if (user) {
+          const updatedUser = {
+            ...user,
+            isPremium: false,
+            premiumExpiryDate: null,
+          };
+          setUser(updatedUser);
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+        }
+        clearInterval(interval);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPremium, premiumExpiryDate]);
+
   const updateProfile = async (userId, updateData) => {
     try {
       setError(null);
@@ -675,7 +752,7 @@ const AppProvider = ({ children }) => {
         setAuthenticated,
         loading,
         setLoading,
-         authLoading,
+        authLoading,
         projectcache,
         setProjectcache,
         signup,
@@ -702,6 +779,9 @@ const AppProvider = ({ children }) => {
         chatWithSoulmate,
         soulmateCache,
         setSoulmateCache,
+        isPremium,
+        premiumExpiryDate,
+        activatePremium,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AnyDream from "../components/pages/AnyDream";
 import Nightmare from "../components/pages/Nightmare";
 import DayDream from "../components/pages/DayDream";
@@ -17,8 +17,10 @@ import FindSoulmate from "../components/pages/FindSoulmate";
 import { Menu, X } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ConfirmLeavePopup from "../components/ConfirmLeavePopup";
+import { AppContext } from "@/context/Appcontext";
 
 const SoulmateSidebar = () => {
+  const { isPremium, premiumExpiryDate } = useContext(AppContext);
   const [activeSection, setActiveSection] = useState("home");
   const [activeSubTab, setActiveSubTab] = useState(null);
   const [isPremiumPopupOpen, setIsPremiumPopupOpen] = useState(false);
@@ -43,6 +45,18 @@ const SoulmateSidebar = () => {
       setShowLeavePopup(true);
     } else {
       setActiveSection(section);
+    }
+  };
+
+  const handlePremiumSection = (section) => {
+    if (
+      isPremium &&
+      premiumExpiryDate &&
+      new Date() < new Date(premiumExpiryDate)
+    ) {
+      handleSectionChange(section);
+    } else {
+      setIsPremiumPopupOpen(true);
     }
   };
 
@@ -164,7 +178,8 @@ const SoulmateSidebar = () => {
                 //   setActiveSubTab("any-dream");
                 //   setOpen(false);
                 // }}
-                onClick={() => setIsPremiumPopupOpen(true)}
+                // onClick={() => setIsPremiumPopupOpen(true)}
+                onClick={() => handlePremiumSection("any-dream")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                   activeSection === "any-dream"
                     ? "bg-[#222430] text-white shadow-lg"
@@ -215,7 +230,8 @@ const SoulmateSidebar = () => {
                 //   setActiveSubTab("day-dream");
                 //   setOpen(false);
                 // }}
-                onClick={() => setIsPremiumPopupOpen(true)}
+                // onClick={() => setIsPremiumPopupOpen(true)}
+                onClick={() => handlePremiumSection("day-dream")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                   activeSection === "day-dream"
                     ? "bg-[#222430] text-white shadow-lg"
@@ -240,7 +256,8 @@ const SoulmateSidebar = () => {
                 //   setActiveSubTab("emotional");
                 //   setOpen(false);
                 // }}
-                onClick={() => setIsPremiumPopupOpen(true)}
+                // onClick={() => setIsPremiumPopupOpen(true)}
+                onClick={() => handlePremiumSection("emotional")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                   activeSection === "emotional"
                     ? "bg-[#222430] text-white shadow-lg"
@@ -272,7 +289,8 @@ const SoulmateSidebar = () => {
                 //   setActiveSubTab("life-path");
                 //   setOpen(false);
                 // }}
-                onClick={() => setIsPremiumPopupOpen(true)}
+                // onClick={() => setIsPremiumPopupOpen(true)}
+                onClick={() => handlePremiumSection("life-path")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 ${
                   activeSection === "life-path"
                     ? "bg-[#222430] text-white shadow-lg"
@@ -321,7 +339,8 @@ const SoulmateSidebar = () => {
                 //   setActiveSubTab("energy-numbers");
                 //   setOpen(false);
                 // }}
-                onClick={() => setIsPremiumPopupOpen(true)}
+                // onClick={() => setIsPremiumPopupOpen(true)}
+                onClick={() => handlePremiumSection("energy-numbers")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-all cursor-pointer duration-200 flex items-center gap-3 pb-4 ${
                   activeSection === "energy-numbers"
                     ? "bg-[#222430] text-white shadow-lg"
@@ -379,7 +398,7 @@ const SoulmateSidebar = () => {
                       {activeSection === "name-analysis" && "Name"}
                       {activeSection === "energy-numbers" && "Energy Numbers"}
                       {activeSection === "my-gallery" && "My Gallery"}
-                      {/* {activeSection === "premium-plans" && "Premium Plans"} */}
+                      {activeSection === "premium-plans" && "Premium Plans"}
                     </h3>
                     <div className="flex items-center gap-3  cursor-pointer">
                       <button
@@ -454,8 +473,9 @@ const SoulmateSidebar = () => {
                           </h4>
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                             <div
-                              onClick={() => handleSectionChange("any-dream")}
+                              // onClick={() => handleSectionChange("any-dream")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
+                              onClick={() => handlePremiumSection("any-dream")}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
                               <Image
@@ -493,8 +513,9 @@ const SoulmateSidebar = () => {
                               </span>
                             </div>
                             <div
-                              onClick={() => handleSectionChange("day-dream")}
+                              // onClick={() => handleSectionChange("day-dream")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
+                              onClick={() => handlePremiumSection("day-dream")}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
                               <Image
@@ -517,8 +538,9 @@ const SoulmateSidebar = () => {
                               </div>
                             </div>
                             <div
-                              onClick={() => handleSectionChange("emotional")}
+                              // onClick={() => handleSectionChange("emotional")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
+                              onClick={() => handlePremiumSection("emotional")}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
                               <Image
@@ -548,8 +570,9 @@ const SoulmateSidebar = () => {
                           </h4>
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                             <div
-                              onClick={() => handleSectionChange("life-path")}
+                              // onClick={() => handleSectionChange("life-path")}
                               // onClick={() => setIsPremiumPopupOpen(true)}
+                              onClick={() => handlePremiumSection("life-path")}
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
                               <Image
@@ -590,10 +613,13 @@ const SoulmateSidebar = () => {
                               </span>
                             </div>
                             <div
-                              onClick={() =>
-                                handleSectionChange("energy-numbers")
-                              }
+                              // onClick={() =>
+                              //   handleSectionChange("energy-numbers")
+                              // }
                               // onClick={() => setIsPremiumPopupOpen(true)}
+                              onClick={() =>
+                                handlePremiumSection("energy-numbers")
+                              }
                               className="relative bg-[#3A3D4E] rounded-3xl p-6 flex items-center gap-6 cursor-pointer hover:bg-[#454862] transition"
                             >
                               <Image
